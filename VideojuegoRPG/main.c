@@ -99,13 +99,23 @@ void seleccionPersonaje(){
 
         for(p=0;p<16;p++){
 
-            if(p==15) printf("\nUltimo personaje (maximo: 16 jugadores)\n");
-
             printf("\nPersonaje %d, tipo: ",p);
-            printf("\n(1) Mototaxista \n(2) Politico corrupto \n(3) Medico cubano \n(4) Profesor \n(0) Para salir\nOpcion: ");
+            printf("\n(1) Mototaxista \n(2) Politico corrupto \n(3) Medico cubano \n(4) Profesor \n(0) Para salir\n\nOpcion: ");
             scanf("%d", &seleccion);
 
-            if(seleccion == 0) break;
+            if(p==15) printf("\nUltimo personaje (maximo: 16 jugadores)\n");
+
+            if(seleccion == 0){
+                if(p == 0) {
+                    printf("\nDeben haber 4 jugadores como minimo\n");
+                    p--;
+                }
+                else if(p<4){
+                    printf("\nNecesitas %d personajes mas\n", 4-p);
+                    p--;
+                }
+                else break;
+            }
 
             else if(seleccion == 1){
                 fflush(stdin);
