@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "pila.h"
+#include "cola.h"
+
+typedef struct nodoL{
+    int val;
+    struct nodo *sig;
+} NodoL;
+
+typedef NodoL * Lista;
+
+Lista newList(){
+    return NULL;
+}
+
+typedef struct perso {
+    char nombre[16] ;//1
+    int ptSalud;//1
+    int ptEnergia;//1
+    Pila* inventario;
+    Lista* habilidades;
+    int dano;
+    int rango;
+    int armadura;
+    int evasion;
+    int velocidad;
+    int ptAccion;//1
+    int jugador;
+} Perso[16];
+
+typedef Perso* Personaje;
+
+Personaje newMototaxista(){//q es el numero de jugador
+    Personaje g = malloc(sizeof(Perso));
+    g->nombre[16];
+    g->ptSalud=100;
+    g->ptEnergia=30;
+    g->ptAccion=20;
+//    g->jugador=q;
+    g->dano=10;
+    g->rango=1;
+    g->armadura=40;
+    return g;
+}
+Personaje newPolitiCorrupto(){//q es el numero de jugador
+    Personaje g=malloc(sizeof(Perso));
+    g->nombre[16];
+    g->ptSalud=100;
+    g->ptEnergia=30;
+    g->ptAccion=20;
+//    g->jugador=q;
+    return g;
+}
+Personaje newMedicoCubano(){//q es el numero de jugador
+    Personaje g=malloc(sizeof(Perso));
+    g->nombre[16];
+    g->ptSalud=100;
+    g->ptEnergia=30;
+    g->ptAccion=20;
+ //   g->jugador=q;
+    return g;
+}
+Personaje newProfesor(){//q es el numero de jugador
+    Personaje g=malloc(sizeof(Perso));
+    g->nombre[16];
+    g->ptSalud=100;
+    g->ptEnergia=30;
+    g->ptAccion=20;
+//    g->jugador=q;
+    return g;
+}
+
+enum Efecto{
+    Ninguno, Electrificado, Incendiado, Congelado //Ninguno = 0, Electrificado = 1, Incendiado = 2, Congelado = 3;
+};
+
+typedef struct terreno{
+    Perso* Personaje;
+    enum Efecto efecto;
+    // items Lista (Item);
+} Terreno[10][20];
+
+int main()
+{
+    int persona, p = 0;
+
+        printf("\nSelecciona tu personaje:");
+        printf("\n(1) Mototaxista \n(2) Politico corrupto \n(3) Medico cubano \n(4) Profesor\nOpcion: ");
+
+        scanf("%d", &persona);
+
+        Personaje P1 = newMototaxista();
+        printf("Nombre de tu mototaxista:");
+        gets(P1->nombre);
+        printf("%s", P1->nombre);
+
+        Personaje P2 = newPolitiCorrupto();
+        printf("Nombre de tu politico corrupto:");
+        gets(P2->nombre);
+        printf("%s", P2->nombre);
+
+        Personaje P3 = newMedicoCubano();
+        printf("Nombre de tu medico cubano:");
+        gets(P3->nombre);
+        printf("%s", P3->nombre);
+
+        Personaje P4 = newProfesor();
+        printf("Nombre de tu profesor:");
+        gets(P4->nombre);
+        printf("%s", P4->nombre);
+
+    return 0;
+}
