@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "pila.h"
 #include "cola.h"
+#include <math.h>
 
 typedef struct nodoL{
     int val;
@@ -15,10 +16,10 @@ Lista newList(){
 }
 
 typedef struct perso { //Creamos la estructura del personaje
-    char nombre[16];//1
+    char nombre[16];
     //char tipo[32];
-    int ptSalud;//1
-    int ptEnergia;//1
+    int ptSalud;
+    int ptEnergia;
     Pila* inventario;
     Lista* habilidades;
     int dano;
@@ -26,7 +27,7 @@ typedef struct perso { //Creamos la estructura del personaje
     int armadura;
     int evasion;
     int velocidad;
-    int ptAccion;//1
+    int ptAccion;
     int jugador;
 }Perso;
 
@@ -81,19 +82,13 @@ Personaje newProfesor(){
     return g;
 }
 
+Personaje Jugador[16]; ///Definimos Jugador como variable global, para usarla en todas las funciones
+
 enum Efecto{
     Ninguno, Electrificado, Incendiado, Congelado //Ninguno = 0, Electrificado = 1, Incendiado = 2, Congelado = 3;
 };
 
-typedef struct terreno{
-    Perso* Personaje;
-    enum Efecto efecto;
-    // items Lista (Item);
-} Terreno[10][20];
-
-void seleccionPersonaje(){
-
-    Personaje Cantidad[16];
+int seleccionPersonaje(){
 
     int seleccion, p, s;
 
@@ -119,27 +114,27 @@ void seleccionPersonaje(){
 
             else if(seleccion == 1){
                 fflush(stdin);
-                Cantidad[p] = newMototaxista();
+                Jugador[p] = newMototaxista();
                 printf("\nNombre de tu mototaxista: ");
-                gets(Cantidad[p]->nombre);
+                gets(Jugador[p]->nombre);
             }
             else if(seleccion == 2){
                 fflush(stdin);
-                Cantidad[p] = newPolitiCorrupto();
+                Jugador[p] = newPolitiCorrupto();
                 printf("\nNombre politico corrupto: ");
-                gets(Cantidad[p]->nombre);
+                gets(Jugador[p]->nombre);
             }
             else if(seleccion == 3){
                 fflush(stdin);
-                Cantidad[p] = newMedicoCubano();
+                Jugador[p] = newMedicoCubano();
                 printf("\nNombre medico cubano: ");
-                gets(Cantidad[p]->nombre);
+                gets(Jugador[p]->nombre);
             }
             else if(seleccion == 4){
                 fflush(stdin);
-                Cantidad[p] = newProfesor();
+                Jugador[p] = newProfesor();
                 printf("\nNombre profesor: ");
-                gets(Cantidad[p]->nombre);
+                gets(Jugador[p]->nombre);
             }
             else{
                 printf("\nSelecciona una opcion correcta");
@@ -148,18 +143,37 @@ void seleccionPersonaje(){
         }
         for(int i = 0; i<p; i++){
             printf("\nPersonaje %d: ",i);
-            puts(Cantidad[i]->nombre);
-            printf("Salud %d, ", Cantidad[i]->ptSalud);
-            printf("energia %d, ", Cantidad[i]->ptEnergia);
-            printf("accion %d, ", Cantidad[i]->ptAccion);
-            printf("dano %d, ", Cantidad[i]->dano);
-            printf("rango %d, ", Cantidad[i]->rango);
-            printf("armadura %d \n", Cantidad[i]->armadura);
+            puts(Jugador[i]->nombre);
+            printf("Salud %d, ", Jugador[i]->ptSalud);
+            printf("energia %d, ", Jugador[i]->ptEnergia);
+            printf("accion %d, ", Jugador[i]->ptAccion);
+            printf("dano %d, ", Jugador[i]->dano);
+            printf("rango %d, ", Jugador[i]->rango);
+            printf("armadura %d \n", Jugador[i]->armadura);
         }
+    return p;
 }
 
-int main()
-{
+typedef struct ter{
+    Personaje Jugador[16];
+    enum Efecto efecto;
+    // items Lista (Item);
+} Ter;
+
+typedef Ter* terreno; //terreno apunta a Ter
+
+terreno espacios[10][20];
+
+void terrenoPelea(int x){
+
+    espacios [1][1] = Jugador[1]->nombre;
+
+    printf("%c", espacios[1][1]);
+
+}
+
+int main(){
     seleccionPersonaje();
+    terrenoPelea(10);
     return 0;
 }
