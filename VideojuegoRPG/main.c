@@ -9,7 +9,7 @@ typedef struct nodoL{
     struct nodoL *sig;
 } NodoL;
 
-typedef NodoL * Lista;
+typedef NodoL* Lista;
 
 Lista newList(){
     return NULL;
@@ -17,7 +17,6 @@ Lista newList(){
 
 typedef struct perso { //Creamos la estructura del personaje
     char nombre[16];
-    //char tipo[32];
     int ptSalud;
     int ptEnergia;
     Pila* inventario;
@@ -35,50 +34,64 @@ typedef Perso* Personaje;
 
 Personaje newMototaxista(){
     Personaje g = malloc(sizeof(Perso));
-    //g->tipo[32];
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
     g->ptAccion=20;
-    g->dano=10;
+    //g->jugador=q;
+    g->dano=25;
     g->rango=1;
     g->armadura=40;
+    g->evasion=25;
+    g->velocidad=2;
+    g->inventario=newPila();
+    g->habilidades=newList();
     return g;
 }
 Personaje newPolitiCorrupto(){
     Personaje g = malloc(sizeof(Perso));
-    //g->tipo[32];
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
     g->ptAccion=20;
-    g->dano=10;
-    g->rango=1;
-    g->armadura=40;
+    //g->jugador=q;
+    g->dano=20;
+    g->rango=2;
+    g->armadura=0;
+    g->evasion=10;
+    g->velocidad=4;
+    g->inventario=newPila();
+    g->habilidades=newList();
     return g;
 }
 Personaje newMedicoCubano(){
     Personaje g = malloc(sizeof(Perso));
-    //g->tipo[32];
-    g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
     g->ptAccion=20;
-    g->dano=10;
+    //g->jugador=q;
+    g->dano=15;
     g->rango=1;
-    g->armadura=40;
+    g->armadura=0;
+    g->evasion=10;
+    g->velocidad=1;
+    g->inventario=newPila();
+    g->habilidades=newList();
     return g;
 }
 Personaje newProfesor(){
     Personaje g = malloc(sizeof(Perso));
-    //g->tipo[32];
-    g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
     g->ptAccion=20;
-    g->dano=10;
-    g->rango=1;
-    g->armadura=40;
+    //g->jugador=q;
+    g->dano=15;
+    g->rango=4;
+    g->armadura=10;
+    g->evasion=20;
+    g->velocidad=3;
+    g->inventario=newPila();
+    g->habilidades=newList();
     return g;
 }
 
@@ -156,24 +169,23 @@ int seleccionPersonaje(){
 
 typedef struct ter{
     Personaje Jugador[16];
-    enum Efecto efecto;
+    //  enum Efecto efecto;
     // items Lista (Item);
 } Ter;
 
 typedef Ter* terreno; //terreno apunta a Ter
 
+terreno newTerreno(){
+    terreno t = malloc(sizeof(Ter));
+}
+
 terreno espacios[10][20];
 
-void terrenoPelea(int x){
-
-    espacios [1][1] = Jugador[1]->nombre;
-
-    printf("%c", espacios[1][1]);
+void terrenoPelea(){
 
 }
 
-int main(){
+void main(){
     seleccionPersonaje();
-    terrenoPelea(10);
-    return 0;
+    terrenoPelea();
 }
