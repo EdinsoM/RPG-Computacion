@@ -326,7 +326,7 @@ void imprimeTerreno(){
     for(int i=0;i<10;i++){ ///espacios[y][x]
         printf("\n|%d|",i);
         for(int j=0;j<20;j++){
-            if(espacios[i][j]->Jugador == NULL) printf("[N]");
+            if(espacios[i][j]->Jugador == NULL) printf("[-]");
             else printf("[%s]", espacios[i][j]->Jugador->nombre);///Hay un problema, quiero colocar espacios[i][j]->Jugador->nombre[0] para imprimir solo las siglas, pero me da error la consola.
         }
     }printf("\n");
@@ -348,13 +348,11 @@ int inicio(){
 
 void turno(ListaP La, ListaP Lb){
 
-    NodoP *t0 = malloc(sizeof(NodoP));
-    NodoP *t1 = malloc(sizeof(NodoP));
+    NodoP *t0 = La;
+    NodoP *t1 = Lb;
 
-    t0 = La; /// t0 y t1 son apuntadores a las listas creadas anteriormente, se van a ir desplazando a lo largo de las listas, apuntando a los personajes
-    t1 = Lb; /// que les jugar
-
-    int seguir0 = 1, seguir1 = 1;
+    //t0 = La; /// t0 y t1 son apuntadores a las listas creadas anteriormente, se van a ir desplazando a lo largo de las listas, apuntando a los personajes
+    //t1 = Lb; /// que les jugar
 
     ///Hice 3 while, el primero que es infinito (cuya condicion hay que cambiar) permite la asignación de los turnos y de los puntos a cada personaje
     ///en la medida que les toque jugar.
@@ -364,6 +362,9 @@ void turno(ListaP La, ListaP Lb){
     ///el while infinito permite volver al ciclo del jugador 1, y asi vamos
 
     while(1){
+
+    int seguir0 = 1, seguir1 = 1;
+
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
