@@ -11,7 +11,7 @@
 
 typedef Nodo* Lista;
 
-/*Lista newList(){
+Lista newList(){
     return NULL;
 }
 */
@@ -21,7 +21,7 @@ typedef struct perso { //Creamos la estructura del personaje
     int ptSalud;
     int ptEnergia;
     Pila* inventario;
-//    Lista* habilidades;
+//  Lista* habilidades;
     int dano;
     int rango;
     int armadura;
@@ -44,7 +44,7 @@ Personaje newMototaxista(){
     g->evasion=25;
     g->velocidad=2;
     g->inventario=newPila();
-//    g->habilidades=newList();
+//  g->habilidades=newList();
     return g;
 }
 Personaje newPolitiCorrupto(){
@@ -92,7 +92,6 @@ Personaje newProfesor(){
 //    g->habilidades=newList();
     return g;
 }
-
 Personaje newPrueba(){
     Personaje g = malloc(sizeof(Perso));
     g->nombre[16] = "Prueba";
@@ -112,8 +111,8 @@ Personaje newPrueba(){
 Personaje Jugador[2][8]; ///Definimos Jugador como variable global, para usarla en todas las funciones
 
 typedef struct nodoP{
-    Personaje* Jugador;
-    struct nodoP *sig;
+    Personaje Jug;
+    struct nodoP* sig;
 } NodoP;
 
 typedef NodoP* ListaP;
@@ -122,21 +121,22 @@ ListaP newListaP(){
     return NULL;
 }
 
-void insertaPersonaje(Personaje* J, ListaP *L){
+void insertaPersonaje(Personaje J, ListaP *L){
     NodoP *q = malloc(sizeof(NodoP));
-    q->Jugador = *J;
+    q->Jug = J;
     q->sig = *L;
     *L = q;
 }
 
 void escribeLista(ListaP L){
-    int i = 0;
-    printf("\n");
-    while(L!=NULL){
-        printf("%s",L->Jugador[0][i].nombre);
+    printf("[");
+    while(L->sig!=NULL){
+        printf("%c, ", L->Jug->nombre[0]);
+        //puts(L->Jug->nombre);
         L = L->sig;
-        i++;
     }
+    printf("%c", L->Jug->nombre[0]);
+    printf("]");
 }
 
 /*
@@ -181,7 +181,7 @@ NodoP turno(ListaP *L1, ListaP *L2, nodoP *p, nodoP *q){
 }
 */
 typedef struct ter{
-    Personaje *Jugador;
+    Personaje Jugador;
     //enum Efecto efecto;
     //items Lista (Item);
 } Ter;
@@ -191,8 +191,8 @@ typedef Ter* terreno; //terreno apunta a Ter
 terreno newTerreno(){
     terreno t = malloc(sizeof(Ter));
     t->Jugador = NULL;
-    //
-    //
+    // t->efecto = NULL;
+    // t->item = NULL;
     return t;
 }
 
@@ -202,33 +202,26 @@ enum Efecto{
     Ninguno, Electrificado, Incendiado, Congelado //Ninguno = 0, Electrificado = 1, Incendiado = 2, Congelado = 3;
 };
 
-ListaP L0;
-ListaP L1;
-
-void seleccionPersonaje(){
-
-    L0 = newListaP();
-    L1 = newListaP();
-
+void seleccionPersonaje(int x){
     int seleccion, s, p;
 
         for(int j=0;j<2;j++){
 
-            for(p=0;p<8;p++){
+            for(p=0;p<x;p++){
 
                 printf("\nJugador %d, personaje %d, tipo: ",j, p);
                 printf("\n(1) Mototaxista \n(2) Politico corrupto \n(3) Medico cubano \n(4) Profesor \n(0) Para salir\n\nOpcion: ");
                 scanf("%d", &seleccion);
 
-                if(p==7) printf("\nUltimo personaje (maximo: 8 personajes)\n");
+                if(p==x-1) printf("\nUltimo personaje (maximo: %d personajes)\n",x);
 
                 if(seleccion == 0){
                     if(p == 0) {
-                        printf("\nDeben haber 4 personajes como minimo\n");
+                        printf("\nDeben haber %d personajes como minimo\n",x);
                         p--;
                     }
-                    else if(p<4){
-                        printf("\nNecesitas %d personajes mas\n", 4-p);
+                    else if(p<x){
+                        printf("\nNecesitas %d personajes mas\n",x-p);
                         p--;
                     }
                     else break;
@@ -239,56 +232,33 @@ void seleccionPersonaje(){
                     Jugador[j][p] = newMototaxista();
                     printf("\nNombre de tu mototaxista: ");
                     gets(Jugador[j][p]->nombre);
-                    if(j==0){
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L0);
-                    }
-                    if(j==1){
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L1);
-                    }
+                    if(j==0) espacios[p][0]->Jugador = Jugador[j][p];
+                    if(j==1) espacios[p][19]->Jugador = Jugador[j][p];
                 }
                 else if(seleccion == 2){
                     fflush(stdin);
                     Jugador[j][p] = newPolitiCorrupto();
                     printf("\nNombre politico corrupto: ");
                     gets(Jugador[j][p]->nombre);
-                    if(j==0){
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L0);
-                    }
-                    if(j==1){
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L1);
-                    }
+                    if(j==0) espacios[p][0]->Jugador = Jugador[j][p];
+                    if(j==1) espacios[p][19]->Jugador = Jugador[j][p];
                 }
                 else if(seleccion == 3){
                     fflush(stdin);
                     Jugador[j][p] = newMedicoCubano();
                     printf("\nNombre medico cubano: ");
                     gets(Jugador[j][p]->nombre);
-                    if(j==0){
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L0);
-                    }
-                    if(j==1){
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L1);
-                    }
+                    if(j==0) espacios[p][0]->Jugador = Jugador[j][p];
+                    if(j==1) espacios[p][19]->Jugador = Jugador[j][p];
+
                 }
                 else if(seleccion == 4){
                     fflush(stdin);
                     Jugador[j][p] = newProfesor();
                     printf("\nNombre profesor: ");
                     gets(Jugador[j][p]->nombre);
-                    if(j==0){
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L0);
-                    }
-                    if(j==1){
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        insertaPersonaje(&Jugador[j][p],&L1);
-                    }
+                    if(j==0) espacios[p][0]->Jugador = Jugador[j][p];
+                    if(j==1) espacios[p][19]->Jugador = Jugador[j][p];
                 }
                 else{
                     printf("\nSelecciona una opcion correcta");
@@ -326,34 +296,75 @@ void imprimeTerreno(){
         printf("\n");
         for(int j=0;j<20;j++){
             if(espacios[i][j]->Jugador == NULL) printf("[N]");
-            else printf("[Y]");//printf("[%s]",espacios[i][j]->Jugador.nombre);
+            else printf("[%s]", espacios[i][j]->Jugador->nombre);
         }
     }printf("\n");
 }
 
-void movimientoPersonaje(terreno* E, Personaje J, int x, int y){
-    //terreno a = espacios[x][y];
+void movimientoPersonaje(terreno E, Personaje J, int x, int y){
     espacios[x][y]->Jugador = J;
-    (*E)->Jugador = NULL;
-    //return a;
+    E->Jugador = NULL;
+}
+
+int inicio(){
+    int cantidad;
+    printf("\n\nCon cuantos personajes vas a jugar? Minimo 4, maximo 8 por jugador: ");
+    scanf("%d", &cantidad);
+    if(cantidad>=4 && cantidad<=8) seleccionPersonaje(cantidad);
+    else inicio();
+    return cantidad;
+}
+
+void turno(ListaP La, ListaP Lb){
+
+    NodoP *t0 = malloc(sizeof(NodoP));
+    NodoP *t1 = malloc(sizeof(NodoP));
+
+    t0 = La;
+    t1 = Lb;
+
+    printf("\nJuega el personaje %s", t0->Jug->nombre);
+    printf("\nJuega el personaje %s", t1->Jug->nombre);
+
 }
 void main(){
 
-    //int x, y, s;
+    printf("Bienvenido a la batalla de gallos.");
+    int a;
     terrenoPelea();
-    seleccionPersonaje();
+    a = inicio();
+
+    ListaP L0 = newListaP();
+    for(int i=0;i<a;i++){
+        insertaPersonaje(Jugador[0][i], &L0);
+    }
+
+    ListaP L1 = newListaP();
+    for(int i=0;i<a;i++){
+        insertaPersonaje(Jugador[1][i], &L1);
+    }
+
+    printf("\nIniciales de los personajes del jugador 0: ");
     escribeLista(L0);
+    printf("\nIniciales de los personajes del jugador 1: ");
+    escribeLista(L1);
+    printf("\n");
 
-    //Jugador[1][1] = newPrueba();
-    //espacios[0][0]->Jugador = Jugador[1][1];
+    imprimeTerreno();
+    //turno(L0,L1);
 
-    //imprimeTerreno();
+    /*
+    Jugador[1][1] = newPrueba();
+    espacios[0][0]->Jugador = Jugador[1][1];
 
-    /*while(s != 1){
+    imprimeTerreno();
+
+    int x,y,s;
+    while(s != 1){
         printf("Casilla a moverte: ");
         scanf("%d",&x);
         scanf("%d",&y);
-        movimientoPersonaje(&espacios[0][0], Jugador[1][1], x, y);
+        movimientoPersonaje(espacios[0][0], Jugador[1][1], x, y);
         imprimeTerreno();
         printf("1 para siguiente turno, 0 para seguir: ");
         scanf("%d",&s);
