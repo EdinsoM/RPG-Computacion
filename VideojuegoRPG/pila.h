@@ -1,8 +1,19 @@
 #ifndef PILA_H_INCLUDED
 #define PILA_H_INCLUDED
 
+
+typedef struct it{
+    char *nombre;//1
+    int costo;//funcion efecto
+    int n;//este entero definira el case de la
+    int rango;
+    ///void (*efecto)(int,int);
+}It;
+
+typedef It* Item;
+
 typedef struct nodo {
-    int val;
+    Item i;
     struct nodo* sig;
 } Nodo;
 
@@ -17,8 +28,8 @@ int esVacia(Pila p){
 }
 
 ///Pre: Pila no vacia, p->sig null
-int top(Pila p){
-    return p->val;
+Pila top(Pila p){
+    return p->i;
 }
 
 ///Pre: Pila no vacía p
@@ -29,11 +40,13 @@ void pop(Pila *p){
 }
 
 ///Pre: True (Ninguna)
-void push(int x, Pila *p){
+void push(Item x, Pila *p){
     Nodo *q = malloc(sizeof(Nodo));
-    q->val = x;
+    q = x;
     q->sig = *p;
     *p = q;
 }
+
+
 
 #endif // PILA_H_INCLUDED
