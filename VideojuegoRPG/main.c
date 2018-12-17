@@ -723,23 +723,4 @@ void main(){
 
     imprimeTerreno();
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
-
-    /*
-    Jugador[1][1] = newPrueba();
-    espacios[0][0]->Jugador = Jugador[1][1];
-
-    imprimeTerreno();
-
-    int x,y,s;
-    while(s != 1){
-        printf("Casilla a moverte: ");
-        scanf("%d",&x);
-        scanf("%d",&y);
-        movimientoPersonaje(espacios[0][0], Jugador[1][1], x, y);
-        imprimeTerreno();
-        printf("1 para siguiente turno, 0 para seguir: ");
-        scanf("%d",&s);
-    }
-    imprimeTerreno();
-    */
 }
