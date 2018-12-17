@@ -400,6 +400,15 @@ void turno(ListaP La, ListaP Lb){
                     scanf("%d", &seguir0);
                 }
             }
+            else if(h == 2){
+
+            }
+            else if(h == 3){
+
+            }
+            else if(h == 4){
+
+            }
         }
         ///Si salimos del ciclo, el apuntador t0 que se desplaza por la lista ahora va a apuntar al siguiente personaje, que será seleccionado cuando retornemos
         ///al primer while
@@ -439,7 +448,17 @@ void turno(ListaP La, ListaP Lb){
                     scanf("%d", &seguir1);
                 }
             }
+            else if(h == 2){
+
+            }
+            else if(h == 3){
+
+            }
+            else if(h == 4){
+
+            }
         }
+
         t1 = t1->sig;
         if(t1 == NULL) t1 = Lb;
     }
