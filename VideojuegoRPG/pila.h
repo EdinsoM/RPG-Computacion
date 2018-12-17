@@ -3,7 +3,7 @@
 
 
 typedef struct it{
-    char nombreI[32];//1
+    char *nombre;//1
     int costo;//funcion efecto
     int n;//este entero definira el case de la
     int rango;

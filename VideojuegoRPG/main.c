@@ -4,6 +4,110 @@
 #include "cola.h"
 #include <math.h>
 
+Item newpociondesalud(){
+    Item i=malloc(sizeof(It));
+    i->nombre="Atamel";
+    i->costo=3;
+    i->rango=0;
+    /// i->efecto=Aguinaldo;
+    return i;
+}
+Item newpociondeEnergia(){
+    Item i=malloc(sizeof(It));
+    i->nombre= "Cafe";
+    i->costo=3;
+    i->rango=0;
+    /// i->efecto=Incendiar;
+    return i;
+}
+Item newgranadaanuladora(){
+    Item i=malloc(sizeof(It));
+    i->nombre= "Granada_hora_del_burro";
+    i->costo=5;
+    i->rango=5;
+    /// i->efecto=VisaNegada;
+    return i;
+}
+
+typedef struct ha{
+    char *nombre ;//1
+    int costoEnergia;
+    int costoAccion;
+    int rango;
+    /// void (*efecto)(int,int);
+}Ha;
+
+typedef Ha* Habilidad;
+
+Habilidad newRestaurar(){
+    Habilidad j=malloc(sizeof(Ha));
+    j->nombre="Ramazos";
+    j->costoEnergia=5;
+    j->costoAccion=4;
+    j->rango=2;
+    ///j->efecto=Aguinaldo;
+    return j;
+}
+Habilidad newIncendiar(){
+    Habilidad j=malloc(sizeof(Ha));
+    j->nombre="PrenderCandela";
+    j->costoEnergia=2;
+    j->costoAccion=7;
+    j->rango=3;
+    /// j->efecto=Incendiar;
+    return j;
+}
+Habilidad newCongelar(){
+    Habilidad j=malloc(sizeof(Ha));
+    j->nombre="PegarPacheco";
+    j->costoEnergia=4;
+    j->costoAccion=4;
+    j->rango=3;
+    /// j->efecto=VisaNegada;
+    return j;
+}
+Habilidad newElectrocutar(){
+    Habilidad j=malloc(sizeof(Ha));
+    j->nombre = "Corrientazo";
+    j->costoEnergia=10;
+    j->costoAccion=5;
+    j->rango=4;
+    /// j->efecto=Corrientazo;
+    return j;
+}
+
+typedef struct nodeha{
+    Habilidad h;
+    struct nodeha* sig;
+}NodoHa;
+
+typedef NodoHa* Listaha;
+
+Listaha newListaha(){
+    Listaha L = malloc(sizeof(NodoHa));
+    L->h = NULL;
+    L->sig = NULL;
+    return L;
+}
+void agregar(Habilidad x, Listaha *L){
+    NodoHa *p = malloc(sizeof(NodoHa));
+    p->h = x;
+    p->sig = *L;
+    *L = p;
+}
+void escribeListaH(Listaha L){
+    int k = 1;
+    if(L != NULL){
+        while (L->sig != NULL){
+        printf("%d.- %s\n", k,(L->h)->nombre);
+        //puts(L->(h*nombre));
+        L = L->sig;
+        k++;
+        }
+    printf("%d.- %s\n", k,(L->h)->nombre);
+    }
+}
+
 typedef struct nodoH{
     int val;
     struct nodoH *sig;
@@ -63,7 +167,7 @@ Personaje newPolitiCorrupto(){
     g->posX;
     g->posY;
     g->inventario;
-//    g->habilidades=newList();
+    g->habilidades;
     return g;
 }
 Personaje newMedicoCubano(){
@@ -80,7 +184,7 @@ Personaje newMedicoCubano(){
     g->posX;
     g->posY;
     g->inventario;
-//    g->habilidades=newList();
+    g->habilidades;
     return g;
 }
 Personaje newProfesor(){
@@ -97,7 +201,7 @@ Personaje newProfesor(){
     g->posX;
     g->posY;
     g->inventario;
-//    g->habilidades=newList();
+    g->habilidades;
     return g;
 }
 
@@ -154,6 +258,75 @@ terreno espacios[10][20];
 enum Efecto{
     Ninguno, Electrificado, Incendiado, Congelado //Ninguno = 0, Electrificado = 1, Incendiado = 2, Congelado = 3;
 };
+
+void usarItem(Item i, int x, int y){
+    if(i->nombre == "Atamel"){
+         espacios[y][x]->Jugador->ptSalud = (espacios[x][y]->Jugador->ptSalud)+30;//un tercio del maximo
+
+    }
+    if(i->nombre=="Cafe"){
+         espacios[y][x]->Jugador->ptEnergia = (espacios[x][y]->Jugador->ptEnergia)+10;
+
+    }
+    if(i->nombre=="granada_hora_del_burro"){
+        for(int j=x-1;j<x+2;j++){
+             for(int k=y-1;k<y+2;k++){
+                espacios[y][x]->efecto = 0;
+            }
+        }
+    }
+}
+
+void usarHabilidad(Habilidad h, int x, int y, int distancia, int ptAccion){
+    if(h->nombre=="Ramazos"){
+        if(h->rango <= distancia && ptAccion >= h->costoAccion){
+             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)+30;//un tercio del maximo
+        }
+        else{
+            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
+            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
+        }
+
+
+    }
+    if(h->nombre=="PrenderCandela"){
+         if(h->rango <= distancia && ptAccion >= h->costoAccion){
+             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)-((espacios[y][x]->Jugador->ptSalud)/3);
+             espacios[y][x]->efecto = 2;//Casilla incendiada
+        }
+        else{
+            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
+            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
+        }
+    }
+    if(h->nombre=="PegarPacheco"){
+        if(h->rango <= distancia && ptAccion >= h->costoAccion){
+            espacios[y][x]->Jugador->ptAccion = 0;
+            espacios[y][x]->efecto = 3;//Casilla Congelada
+        }
+        else{
+            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
+            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
+        }
+    }
+    if(h->nombre=="Corrientazo"){
+        if(h->rango <= distancia && ptAccion >= h->costoAccion){
+            espacios[y][x]->Jugador->ptEnergia = (espacios[y][x]->Jugador->ptEnergia)/2;
+            espacios[y][x]->efecto = 1;//Casilla Electrificada
+        }
+        else{
+            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
+            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
+        }
+    }
+}
+
+void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
+    if(rand()%101 > evasion ){
+        vida=vida-(dano*100/armadura); ///Porcentaje
+    }
+    else printf("El ataque ha sido esquivado");
+}
 
 void seleccionPersonaje(int x){
     int seleccion, s, p;
@@ -381,14 +554,14 @@ void turno(ListaP La, ListaP Lb){
                 if (esVacia(t0->Jug->inventario)) printf("\nNo posees NADA en tu inventario\n");
                 else{
                     Item a = top(t0->Jug->inventario);
-                    printf("%s\n",a->nombreI);
+                    printf("%s\n",a->nombre);
                     printf("Deseas utilizar este Item? Si(1), no (2): ");
                     scanf("%d",k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                         if(a->rango>puntos && t0->Jug->ptAccion>a->costo){
-                            //usarItem(top(t0->Jug->inventario), x, y); Falta por agregar
+                            usarItem(a, x, y);
                             pop(t0->Jug->inventario);
                         }
                         else{
@@ -406,9 +579,9 @@ void turno(ListaP La, ListaP Lb){
             if(h==3){///Atacar
                 printf("A donde quieres atacar?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
-                if(t0->Jug->rango >= puntos && t0->Jug->ptAccion > 1 ){}///Crear funcion de atacar
+                if(t0->Jug->rango >= puntos && t0->Jug->ptAccion > 1 ){///Crear funcion de atacar
 
-
+                }
                 else{
                     if(t0->Jug->rango < puntos ) printf("El objetivo esta fuera de rango\n");
                     if(t0->Jug->ptAccion <= 1) printf("No posees suficientes puntos de accion\n");
@@ -472,15 +645,15 @@ void turno(ListaP La, ListaP Lb){
                 int k;
                 if (esVacia(t1->Jug->inventario)) printf("\nNo posees NADA en tu inventario\n");
                 else{
-                    Item a = top(t1->Jug->inventario);
-                    printf("%s\n",a->nombreI);
+                    Item b = top(t1->Jug->inventario);
+                    printf("%s\n",a->nombre);
                     printf("Deseas utilizar este Item? Si(1), no (2): ");
                     scanf("%d",k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
-                        if(a->rango>puntos && t1->Jug->ptAccion>a->costo){
-                            //usarItem(top(t1->Jug->inventario), x, y); Falta por agregar
+                        if(b->rango>puntos && t1->Jug->ptAccion>b->costo){
+                            usarItem(b, x, y); Falta por agregar
                             pop(t1->Jug->inventario);
                         }
                         else{

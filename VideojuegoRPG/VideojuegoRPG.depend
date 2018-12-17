@@ -1,12 +1,12 @@
 # depslib dependency file v1.0
-1544985145 source:c:\users\eli\documents\github\rpg-computacion\videojuegorpg\main.c
+1545017503 source:c:\users\eli\documents\github\rpg-computacion\videojuegorpg\main.c
 	<stdio.h>
 	<stdlib.h>
 	"pila.h"
 	"cola.h"
 	<math.h>
 
-1544233877 c:\users\eli\documents\github\rpg-computacion\videojuegorpg\pila.h
+1545017156 c:\users\eli\documents\github\rpg-computacion\videojuegorpg\pila.h
 
 1544234076 c:\users\eli\documents\github\rpg-computacion\videojuegorpg\cola.h
 
