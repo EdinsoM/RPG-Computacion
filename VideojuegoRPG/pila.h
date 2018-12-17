@@ -3,7 +3,7 @@
 
 
 typedef struct it{
-    char *nombre;//1
+    char nombreI[32];//1
     int costo;//funcion efecto
     int n;//este entero definira el case de la
     int rango;
@@ -28,7 +28,7 @@ int esVacia(Pila p){
 }
 
 ///Pre: Pila no vacia, p->sig null
-Pila top(Pila p){
+Item top(Pila p){
     return p->i;
 }
 
@@ -42,7 +42,7 @@ void pop(Pila *p){
 ///Pre: True (Ninguna)
 void push(Item x, Pila *p){
     Nodo *q = malloc(sizeof(Nodo));
-    q = x;
+    q->i = x;
     q->sig = *p;
     *p = q;
 }

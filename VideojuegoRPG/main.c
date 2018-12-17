@@ -4,24 +4,23 @@
 #include "cola.h"
 #include <math.h>
 
-/*typedef struct nodo{
+typedef struct nodoH{
     int val;
-    struct nodo *sig;
-} Nodo;
+    struct nodoH *sig;
+} NodoH;
 
-typedef Nodo* Lista;
+typedef NodoH* Lista;
 
 Lista newList(){
     return NULL;
 }
-*/
 
 typedef struct perso { ///Creamos la estructura del personaje
     char nombre[16];
     int ptSalud;
     int ptEnergia;
-    Pila* inventario;
-//  Lista* habilidades;
+    Pila inventario;
+    Lista habilidades;
     int dano;
     int rango;
     int armadura;
@@ -46,8 +45,8 @@ Personaje newMototaxista(){
     g->velocidad=2;
     g->posX;
     g->posY;
-    g->inventario=newPila();
-//  g->habilidades=newList();
+    g->inventario;
+    g->habilidades;
     return g;
 }
 Personaje newPolitiCorrupto(){
@@ -63,7 +62,7 @@ Personaje newPolitiCorrupto(){
     g->velocidad=4;
     g->posX;
     g->posY;
-    g->inventario=newPila();
+    g->inventario;
 //    g->habilidades=newList();
     return g;
 }
@@ -80,7 +79,7 @@ Personaje newMedicoCubano(){
     g->velocidad=1;
     g->posX;
     g->posY;
-    g->inventario=newPila();
+    g->inventario;
 //    g->habilidades=newList();
     return g;
 }
@@ -97,7 +96,7 @@ Personaje newProfesor(){
     g->velocidad=3;
     g->posX;
     g->posY;
-    g->inventario=newPila();
+    g->inventario;
 //    g->habilidades=newList();
     return g;
 }
@@ -186,6 +185,8 @@ void seleccionPersonaje(int x){
                     Jugador[j][p] = newMototaxista();
                     printf("\nNombre de tu mototaxista: ");
                     gets(Jugador[j][p]->nombre);
+                    Jugador[j][p]->inventario = newPila();
+                    Jugador[j][p]->habilidades = newList();
                     if(j==0) {
                         espacios[p][0]->Jugador = Jugador[j][p];
                         Jugador[j][p]->posX = 0;
@@ -202,6 +203,8 @@ void seleccionPersonaje(int x){
                     Jugador[j][p] = newPolitiCorrupto();
                     printf("\nNombre politico corrupto: ");
                     gets(Jugador[j][p]->nombre);
+                    Jugador[j][p]->inventario = newPila();
+                    Jugador[j][p]->habilidades = newList();
                     if(j==0) {
                         espacios[p][0]->Jugador = Jugador[j][p];
                         Jugador[j][p]->posX = 0;
@@ -218,6 +221,8 @@ void seleccionPersonaje(int x){
                     Jugador[j][p] = newMedicoCubano();
                     printf("\nNombre medico cubano: ");
                     gets(Jugador[j][p]->nombre);
+                    Jugador[j][p]->inventario = newPila();
+                    Jugador[j][p]->habilidades = newList();
                     if(j==0) {
                         espacios[p][0]->Jugador = Jugador[j][p];
                         Jugador[j][p]->posX = 0;
@@ -235,6 +240,8 @@ void seleccionPersonaje(int x){
                     Jugador[j][p] = newProfesor();
                     printf("\nNombre profesor: ");
                     gets(Jugador[j][p]->nombre);
+                    Jugador[j][p]->inventario = newPila();
+                    Jugador[j][p]->habilidades = newList();
                     if(j==0) {
                         espacios[p][0]->Jugador = Jugador[j][p];
                         Jugador[j][p]->posX = 0;
@@ -303,7 +310,6 @@ void movimientoPersonaje(terreno E, Personaje J, int x, int y){
 int calculaPuntos(int PosJugx, int x, int PosJugy, int y){ ///Tambien sirve para calcular distancias
     if(abs(PosJugx-x) > abs(PosJugy-y)) return abs(PosJugx-x);
     else return abs(PosJugy-y);
-
 }
 
 int inicio(){
@@ -322,8 +328,6 @@ void turno(ListaP La, ListaP Lb){
     t0 = La; /// t0 y t1 son apuntadores a las listas creadas anteriormente, se van a ir desplazando a lo largo de las listas, apuntando a los personajes
     t1 = Lb; /// que les jugar
 
-    int seguir0 = 1, seguir1 = 1;
-
     ///Hice 3 while, el primero que es infinito (cuya condicion hay que cambiar) permite la asignación de los turnos y de los puntos a cada personaje
     ///en la medida que les toque jugar.
 
@@ -332,6 +336,9 @@ void turno(ListaP La, ListaP Lb){
     ///el while infinito permite volver al ciclo del jugador 1, y asi vamos
 
     while(1){
+
+        int seguir0 = 1, seguir1 = 1;
+
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
@@ -341,6 +348,7 @@ void turno(ListaP La, ListaP Lb){
             printf("\nQue quieres hacer?\n\n1.Moverte\n2.Usar un item\n3.Atacar\n4.Usar una habilidad\n");
             printf("\nOpcion: ");
             scanf("%d",&h);
+
             if(h == 1){
                 printf("A donde te quieres mover?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 //calculaPuntos = (abs(t0->Jug->posX-x) + abs(t0->Jug->posY-y)); ///Tambien sirve para calcular distancias
@@ -368,18 +376,19 @@ void turno(ListaP La, ListaP Lb){
                     scanf("%d", &seguir0);
                 }
             }
-            if(h==2){///Usar item, Cuando llamo la funcion top, nose si lo hago bien
+            else if(h==2){///Usar item, Cuando llamo la funcion top, no se si lo hago bien
                 int k;
-                if (esVacia(t0->Jug->inventario))printf("No posees NADA en tu inventario\n");
+                if (esVacia(t0->Jug->inventario)) printf("\nNo posees NADA en tu inventario\n");
                 else{
-                    printf("%s\n",top(t0->Jug->inventario)->nombre);
-                    printf("Deseas utilizar este Item?\1)Si\n2)No");
+                    Item a = top(t0->Jug->inventario);
+                    printf("%s\n",a->nombreI);
+                    printf("Deseas utilizar este Item? Si(1), no (2): ");
                     scanf("%d",k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
-                        if(top(t0->Jug->inventario)->rango>puntos && t0->Jug->ptAccion>top(t0->Jug->inventario)->costo){
-                            usarItem(top(t0->Jug->inventario), x, y);
+                        if(a->rango>puntos && t0->Jug->ptAccion>a->costo){
+                            //usarItem(top(t0->Jug->inventario), x, y); Falta por agregar
                             pop(t0->Jug->inventario);
                         }
                         else{
@@ -407,7 +416,7 @@ void turno(ListaP La, ListaP Lb){
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir0);
             }
-            if(h==4){///Usar Hablidad
+            /*if(h==4){///Usar Habilidad
                 char k[];
                 escribeLista(t0->Jug->habilidades);
                 printf("Que habilidad desea usar?");
@@ -417,9 +426,7 @@ void turno(ListaP La, ListaP Lb){
                 usarHabildad(t0->Jug->habilidades, y, x, puntos, t0->Jug->ptAccion);
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir0);
-            }
-
-            seguir1=1;
+            }*/
         }
         ///Si salimos del ciclo, el apuntador t0 que se desplaza por la lista ahora va a apuntar al siguiente personaje, que será seleccionado cuando retornemos
         ///al primer while
@@ -461,38 +468,39 @@ void turno(ListaP La, ListaP Lb){
                 }
             }
 
-            if(h==2){///Usar item, Cuando llamo la funcion top, nose si lo hago bien
+            else if(h==2){///Usar item, Cuando llamo la funcion top, no se si lo hago bien
                 int k;
-                if (esVacia(t1->Jug->inventario))printf("No posees NADA en tu inventario\n");
+                if (esVacia(t1->Jug->inventario)) printf("\nNo posees NADA en tu inventario\n");
                 else{
-                    printf("%s\n",top(t1->Jug->inventario)->nombre);
-                    printf("Deseas utilizar este Item?\1)Si\n2)No");
+                    Item a = top(t1->Jug->inventario);
+                    printf("%s\n",a->nombreI);
+                    printf("Deseas utilizar este Item? Si(1), no (2): ");
                     scanf("%d",k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
-                        if(top(t1->Jug->inventario)->rango>puntos && t1->Jug->ptAccion>top(t1->Jug->inventario)->costo){
-                            usarItem(top(t1->Jug->inventario), x, y);
+                        if(a->rango>puntos && t1->Jug->ptAccion>a->costo){
+                            //usarItem(top(t1->Jug->inventario), x, y); Falta por agregar
                             pop(t1->Jug->inventario);
                         }
                         else{
                              printf("No te alcanzan los puntos de accion, que deseas hacer?");
                              printf("\nElegir otra opcion (1), ceder el turno (0): ");
-                             scanf("%d", &seguir0);
+                             scanf("%d", &seguir1);
                         }
                     }
                     else{
                         printf("\nElegir otra opcion (1), ceder el turno (0): ");
-                        scanf("%d", &seguir0);
+                        scanf("%d", &seguir1);
                     }
                 }
             }
-            if(h==3){///Atacar
+            else if(h==3){///Atacar
                 printf("A donde quieres atacar?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
-                if(t1->Jug->rango >= puntos && t1->Jug->ptAccion > 1 )///Crear funcion de atacar
+                if(t1->Jug->rango >= puntos && t1->Jug->ptAccion > 1){///Crear funcion de atacar
 
-
+                }
                 else{
                     if(t1->Jug->rango < puntos ) printf("El objetivo esta fuera de rango\n");
                     if(t1->Jug->ptAccion <= 1) printf("No posees suficientes puntos de accion\n");
@@ -500,7 +508,7 @@ void turno(ListaP La, ListaP Lb){
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir0);
             }
-            if(h==4){///Usar Hablidad
+            /*else if(h==4){///Usar Habilidad
                 char k[];
                 escribeLista(t1->Jug->habilidades);
                 printf("Que habilidad desea usar?");
@@ -510,8 +518,7 @@ void turno(ListaP La, ListaP Lb){
                 usarHabildad(t1->Jug->habilidades, y, x, puntos, t1->Jug->ptAccion);
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir0);
-            }
-            seguir0 =1;
+            }*/
         }
         t1 = t1->sig;
         if(t1 == NULL) t1 = Lb;
