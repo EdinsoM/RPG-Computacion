@@ -465,7 +465,7 @@ void imprimeTerreno(){
         printf("\n|%d|",i);
         for(int j=0;j<20;j++){
             if(espacios[i][j]->Jugador == NULL) printf("[-]");
-            else printf("[%s]", espacios[i][j]->Jugador->nombre);///Hay un problema, quiero colocar espacios[i][j]->Jugador->nombre[0] para imprimir solo las siglas, pero me da error la consola.
+            else printf("[%c]", espacios[i][j]->Jugador->nombre[0]);
         }
     }printf("\n");
 }
@@ -517,7 +517,7 @@ void turno(ListaP La, ListaP Lb){
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
             int x, y, h, puntos, aceptar; //calculaPuntos
             printf("\nJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
-            printf("\n%s, tienes %d puntos de accion\n", t0->Jug->nombre ,t0->Jug->ptAccion);
+            printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t0->Jug->nombre,t0->Jug->ptSalud,t0->Jug->ptEnergia,t0->Jug->ptAccion);
             printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
             printf("\nOpcion: ");
             scanf("%d",&h);
@@ -551,9 +551,11 @@ void turno(ListaP La, ListaP Lb){
                             if(t1Scan->sig != NULL){
                                 q = t1Scan->sig;
                                 t1Scan->sig = q->sig;
+                                espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
                                 free(q);
                             }
                         }
+
                     }
                     else{
                         if(t0->Jug->rango < puntos ) printf("El objetivo esta fuera de rango\n");
@@ -642,16 +644,15 @@ void turno(ListaP La, ListaP Lb){
 
             }
             else if(h==9){ ///Mostramos las estadísticas del jugador de turno
-                puts(t0->Jug->nombre);
-                printf("\nPosees lo siguiente: ");
+                printf("\n%s, posees lo siguiente: ", t0->Jug->nombre);
                 printf("Salud %d, ", t0->Jug->ptSalud);
                 printf("energia %d, ", t0->Jug->ptEnergia);
                 printf("accion %d, ", t0->Jug->ptAccion);
                 printf("dano %d, ", t0->Jug->dano);
-                printf("rango %d, ", t0->Jug->rango);
+                printf("\nrango %d, ", t0->Jug->rango);
                 printf("armadura %d, ",t0->Jug->armadura);
                 printf("evasion %d, ",t0->Jug->evasion);
-                printf("velocidad %d \n",t0->Jug->velocidad);
+                printf("velocidad %d\n",t0->Jug->velocidad);
             }
         }
         ///Si salimos del ciclo, el apuntador t0 que se desplaza por la lista ahora va a apuntar al siguiente personaje, que será seleccionado cuando retornemos
@@ -666,7 +667,7 @@ void turno(ListaP La, ListaP Lb){
         while(seguir1){
             int x, y, h, puntos,aceptar;
             printf("\nJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
-            printf("\n%s, tienes %d puntos de accion\n", t1->Jug->nombre, t1->Jug->ptAccion);
+            printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t1->Jug->nombre,t1->Jug->ptSalud,t1->Jug->ptEnergia,t1->Jug->ptAccion);
             printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
             printf("\nOpcion: ");
             scanf("%d",&h);
@@ -773,16 +774,15 @@ void turno(ListaP La, ListaP Lb){
 
             }
             else if(h==9){///Mostrar estadísticas
-                puts(t1->Jug->nombre);
-                printf("\nPosees lo siguiente: ");
+                printf("\n%s posees lo siguiente: ", t1->Jug->nombre);
                 printf("Salud %d, ", t1->Jug->ptSalud);
                 printf("energia %d, ", t1->Jug->ptEnergia);
                 printf("accion %d, ", t1->Jug->ptAccion);
                 printf("dano %d, ", t1->Jug->dano);
-                printf("rango %d, ", t1->Jug->rango);
+                printf("\nrango %d, ", t1->Jug->rango);
                 printf("armadura %d, ",t1->Jug->armadura);
                 printf("evasion %d, ",t1->Jug->evasion);
-                printf("velocidad %d \n",t1->Jug->velocidad);
+                printf("velocidad %d\n",t1->Jug->velocidad);
             }
         }
         t1 = t1->sig;
@@ -798,13 +798,13 @@ void turno(ListaP La, ListaP Lb){
     else printf("\nAdios!!!");
 
 }
+
 void main(){
 
     printf("Bienvenido a la Batalla de Gallos 2018.");
     int a;
 
     terrenoPelea();
-
 
     Habilidad R = newRestaurar();
     Habilidad I = newIncendiar();
