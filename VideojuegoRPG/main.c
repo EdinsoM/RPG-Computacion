@@ -322,10 +322,10 @@ void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, i
 void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
     if(rand()%101 > evasion ){
         int k;
-        k=vida-(dano*10/armadura);
-        printf(" Has hecho %d dano al personaje %s \n", (dano*10/armadura), espacios[y][x]->Jugador->nombre);
+        k=vida-(dano*(100-armadura))/100;
+        printf(" Has hecho %d dano al personaje %s \n", (dano*(100-armadura))/100, espacios[y][x]->Jugador->nombre);
         espacios[y][x]->Jugador->ptSalud=k;
-        printf(" A %s le queda %d puntos de vida",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud); ///Porcentaje
+        printf(" A %s le queda %d puntos de vida",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
     }
     else printf("El ataque ha sido esquivado");
 }
