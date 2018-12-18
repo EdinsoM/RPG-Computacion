@@ -542,20 +542,21 @@ void turno(ListaP La, ListaP Lb){
                         if(t1Scan->Jug->ptSalud <= 0){
                             Lb = Lb->sig;
                             espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
+                            printf("\nHas acabado con %s",t1Scan->Jug->nombre);
                             free(t1Scan);
                         }
                         else{
-                            while(t1Scan != NULL && (t1Scan->sig->Jug->ptSalud > 0) ){
+                            while(t1Scan->sig != NULL && (t1Scan->sig->Jug->ptSalud > 0) ){
                                 t1Scan = t1Scan->sig;
                             }
                             if(t1Scan->sig != NULL){
                                 q = t1Scan->sig;
                                 t1Scan->sig = q->sig;
                                 espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
+                                printf("\nHas acabado con %s",t1Scan->Jug->nombre);
                                 free(q);
                             }
                         }
-
                     }
                     else{
                         if(t0->Jug->rango < puntos ) printf("El objetivo esta fuera de rango\n");
@@ -617,7 +618,7 @@ void turno(ListaP La, ListaP Lb){
                     Item a = top(t0->Jug->inventario);
                     printf("%s\n",a->nombre);
                     printf("Deseas utilizar este Item?\1)Si\n2)No");
-                    scanf("%d",k);
+                    scanf("%d",&k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
@@ -644,12 +645,12 @@ void turno(ListaP La, ListaP Lb){
 
             }
             else if(h==9){ ///Mostramos las estadísticas del jugador de turno
-                printf("\n%s, posees lo siguiente: ", t0->Jug->nombre);
-                printf("Salud %d, ", t0->Jug->ptSalud);
-                printf("energia %d, ", t0->Jug->ptEnergia);
-                printf("accion %d, ", t0->Jug->ptAccion);
-                printf("dano %d, ", t0->Jug->dano);
-                printf("\nrango %d, ", t0->Jug->rango);
+                printf("\n%s, posees lo siguiente: ",t0->Jug->nombre);
+                printf("Salud %d, ",t0->Jug->ptSalud);
+                printf("energia %d, ",t0->Jug->ptEnergia);
+                printf("accion %d, ",t0->Jug->ptAccion);
+                printf("dano %d, ",t0->Jug->dano);
+                printf("\nrango %d, ",t0->Jug->rango);
                 printf("armadura %d, ",t0->Jug->armadura);
                 printf("evasion %d, ",t0->Jug->evasion);
                 printf("velocidad %d\n",t0->Jug->velocidad);
@@ -686,6 +687,27 @@ void turno(ListaP La, ListaP Lb){
 
                         ///Ahora escaneamos el estado de los personajes del jugador 0, si alguno tiene vida negativa o nula, se elimina de la lista
 
+                        NodoP *t0Scan, *q;
+                        t0Scan = Lb;
+
+                        if(t0Scan->Jug->ptSalud <= 0){
+                            Lb = Lb->sig;
+                            espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
+                            printf("\nHas acabado con %s",t0Scan->Jug->nombre);
+                            free(t0Scan);
+                        }
+                        else{
+                            while(t0Scan->sig != NULL && (t0Scan->sig->Jug->ptSalud > 0) ){
+                                t0Scan = t0Scan->sig;
+                            }
+                            if(t0Scan->sig != NULL){
+                                q = t0Scan->sig;
+                                t0Scan->sig = q->sig;
+                                espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
+                                printf("\nHas acabado con %s",t0Scan->Jug->nombre);
+                                free(q);
+                            }
+                        }
                     }
                     else{
                         if(t1->Jug->rango < puntos ) printf("El objetivo esta fuera de rango\n");
@@ -747,7 +769,7 @@ void turno(ListaP La, ListaP Lb){
                     Item a = top(t1->Jug->inventario);
                     printf("%s\n",a->nombre);
                     printf("Deseas utilizar este Item?\1)Si\n2)No");
-                    scanf("%d",k);
+                    scanf("%d",&k);
                     if(k==1){
                         printf("En donde quieres utilizar el Item?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                         puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
@@ -801,7 +823,7 @@ void turno(ListaP La, ListaP Lb){
 
 void main(){
 
-    printf("Bienvenido a la Batalla de Gallos 2018.");
+    printf("\nBienvenido a la Batalla de Gallos 2018.");
     int a;
 
     terrenoPelea();
