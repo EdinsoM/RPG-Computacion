@@ -277,58 +277,45 @@ void usarItem(Item i, int x, int y){
     }
 }
 
-void usarHabilidad(Habilidad h, int x, int y, int distancia, int ptAccion, int ptEnergia, int k){
-    if(k==1){
-        if(h->rango <= distancia && ptAccion >= h->costoAccion && ptEnergia >= h->costoEnergia){
-            ptEnergia=ptEnergia-h->costoEnergia;
-            ptAccion=ptAccion-h->costoAccion;
+void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, int ptAccion, int ptEnergia, int k){
+    int f = k;
+    NodoHA *p = L;
+
+    while(f!=1){
+        p=p->sig;
+        f--;
+    }
+
+    if(p->h->rango >= distancia && ptAccion >= p->h->costoAccion && ptEnergia >= p->h->costoEnergia){
+        espacios[posY][posX]->Jugador->ptEnergia=ptEnergia-(p->h->costoEnergia);
+        espacios[posY][posX]->Jugador->ptAccion=ptAccion-(p->h->costoAccion);
+
+        if(strcmp(p->h->nombre,"Ramazos")==0){
             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)+30;//un tercio del maximo
             printf("Le echaste unos ramazos a %s y se ha curado 30 puntos de vida \nAhora tiene %d puntos de vida",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
         }
-        else{
-            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
-            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
-            if(ptEnergia < h->costoEnergia) printf("No posees suficientes puntos de energia\n");
-        }
-    }
-    else if(k==2){
-         if(h->rango <= distancia && ptAccion >= h->costoAccion && ptEnergia >= h->costoEnergia){
-            ptAccion=ptAccion-h->costoAccion;
-            ptEnergia=ptEnergia-h->costoEnergia;
+        if(strcmp(p->h->nombre,"PrenderCandela")==0){
+            printf("Prendiste en candela %s y le quitaste %d puntos de vida \n",espacios[y][x]->Jugador->nombre,((espacios[y][x]->Jugador->ptSalud)/3));
             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)-((espacios[y][x]->Jugador->ptSalud)/3);
             espacios[y][x]->efecto = 2;//Casilla incendiada
+            printf("Ahora tiene %d puntos de vida",espacios[y][x]->Jugador->ptSalud);
         }
-        else{
-            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
-            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
-            if(ptEnergia < h->costoEnergia) printf("No posees suficientes puntos de energia\n");
-        }
-    }
-    else if(k==3){
-        if(h->rango <= distancia && ptAccion >= h->costoAccion && ptEnergia >= h->costoEnergia){
-            ptEnergia=ptEnergia-h->costoEnergia;
-            ptAccion=ptAccion-h->costoAccion;
+        if(strcmp(p->h->nombre,"PegarPacheco")==0){
             espacios[y][x]->Jugador->ptAccion = 0;
             espacios[y][x]->efecto = 3;//Casilla Congelada
+            printf("Le robaste el sueter a %s y ahora se esta muriendo de frio \n",espacios[y][x]->Jugador->nombre);
         }
-        else{
-            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
-            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
-            if(ptEnergia < h->costoEnergia) printf("No posees suficientes puntos de energia\n");
-        }
-    }
-    else if(k==4){
-        if(h->rango <= distancia && ptAccion >= h->costoAccion && ptEnergia >= h->costoEnergia){
-            ptEnergia=ptEnergia-h->costoEnergia;
-            ptAccion=ptAccion-h->costoAccion;
+        if(strcmp(p->h->nombre,"Corrientazo")==0){
             espacios[y][x]->Jugador->ptEnergia = (espacios[y][x]->Jugador->ptEnergia)/2;
             espacios[y][x]->efecto = 1;//Casilla Electrificada
+            printf("Hiciste que %s pegara los dedos en un enchufe \n",espacios[y][x]->Jugador->nombre);
         }
-        else{
-            if(h->rango > distancia  ) printf("El objetivo esta fuera de rango\n");
-            if(ptAccion < h->costoAccion) printf("No posees suficientes puntos de accion\n");
-            if(ptEnergia < h->costoEnergia) printf("No posees suficientes puntos de energia\n");
-        }
+
+    }
+    else{
+        if(p->h->rango < distancia  ) printf("El objetivo esta fuera de rango\n");
+        if(ptAccion < p->h->costoAccion) printf("No posees suficientes puntos de accion\n");
+        if(ptEnergia < p->h->costoEnergia) printf("No posees suficientes puntos de energia\n");
     }
 }
 
@@ -616,7 +603,7 @@ void turno(ListaP La, ListaP Lb){
                 scanf("%d",&k);
                 printf("En que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
-                usarHabilidad(t0->Jug->habilidad, y, x, puntos, t0->Jug->ptAccion,t0->Jug->ptEnergia,k);
+                usarHabilidad(t0->Jug->habilidad, x, y, t0->Jug->posX, t0->Jug->posY, puntos, t0->Jug->ptAccion,t0->Jug->ptEnergia,k);
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir0);
             }
@@ -740,14 +727,14 @@ void turno(ListaP La, ListaP Lb){
                 }
             }
 
-            else if(h==5){ ///Usar Habilidad
+            else if(h==5){///Usar Habilidad
                 int k;
                 escribeListaH(t1->Jug->habilidad);
                 printf("Que habilidad desea usar?");
                 scanf("%d",&k);
                 printf("En que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
-                usarHabilidad(t1->Jug->habilidad, y, x, puntos, t1->Jug->ptAccion,t1->Jug->ptEnergia,k);
+                usarHabilidad(t1->Jug->habilidad, x, y, t1->Jug->posX, t1->Jug->posY, puntos, t1->Jug->ptAccion,t1->Jug->ptEnergia,k);
                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                 scanf("%d", &seguir1);
             }
