@@ -486,9 +486,9 @@ int calculaPuntos(int PosJugx, int x, int PosJugy, int y){ ///Tambien sirve para
 
 int inicio(Listaha h){
     int cantidad;
-    printf("\n\nCon cuantos personajes vas a jugar? Minimo 4, maximo 8 por jugador: ");
+    printf("\n\nCon cuantos personajes vas a jugar? Minimo 2, maximo 8 por jugador: ");
     scanf("%d", &cantidad);
-    if(cantidad>=4 && cantidad<=8) seleccionPersonaje(cantidad,h);
+    if(cantidad>=2 && cantidad<=8) seleccionPersonaje(cantidad,h);
     else inicio(h);
     return cantidad;
 }
