@@ -323,9 +323,9 @@ void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
     if(rand()%101 > evasion ){
         int k;
         k=vida-(dano*(100-armadura))/100;
-        printf(" Has hecho %d dano al personaje %s \n", (dano*(100-armadura))/100, espacios[y][x]->Jugador->nombre);
+        printf("\nHas hecho %d dano al personaje %s\n", (dano*(100-armadura))/100, espacios[y][x]->Jugador->nombre);
         espacios[y][x]->Jugador->ptSalud=k;
-        printf(" A %s le queda %d puntos de vida",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
+        printf("\nA %s le queda %d puntos de vida\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
     }
     else printf("El ataque ha sido esquivado");
 }
@@ -601,7 +601,7 @@ void turno(ListaP La, ListaP Lb){
             else if(h==5){///Usar Habilidad
                 int k;
                 escribeListaH(t0->Jug->habilidad);
-                printf("Que habilidad desea usar?");
+                printf("Que habilidad quieres usar? Opcion: ");
                 scanf("%d",&k);
                 printf("En que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
@@ -731,7 +731,7 @@ void turno(ListaP La, ListaP Lb){
             else if(h==5){///Usar Habilidad
                 int k;
                 escribeListaH(t1->Jug->habilidad);
-                printf("Que habilidad desea usar?");
+                printf("\nQue habilidad quieres usar? Opcion: ");
                 scanf("%d",&k);
                 printf("En que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf("%d",&x); printf("Y = "); scanf("%d",&y);
                 puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
