@@ -263,7 +263,7 @@ terreno newTerreno(){
 terreno espacios[10][20];
 
 void usarItem(Item i, int x, int y){
-    x = x-65;
+
     if(i->nombre=="Atamel"){
          espacios[y][x]->Jugador->ptSalud = (espacios[x][y]->Jugador->ptSalud)+30;//un tercio del maximo
 
@@ -282,7 +282,6 @@ void usarItem(Item i, int x, int y){
 }
 
 void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, int ptAccion, int ptEnergia, int k){
-    x = x-65;
     int f = k;
     NodoHA *p = L;
 
@@ -325,7 +324,6 @@ void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, i
 }
 
 void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
-    x = x-65;
     if(rand()%51 > evasion ){
         int k;
         k=vida-(dano*(100-armadura))/100;
@@ -337,6 +335,7 @@ void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
 }
 
 void Yriarte(int a){
+
     int partidaNueva;
 
     printf("\nElegiste al personaje oculto: Yriarte");
@@ -349,6 +348,7 @@ void Yriarte(int a){
 }
 
 void seleccionPersonaje(int x, Listaha h){
+
     int seleccion, s, p;
 
         for(int j=0;j<2;j++){
@@ -491,16 +491,14 @@ void imprimeTerreno(){
 }
 
 void movimientoPersonaje(terreno E, Personaje J, int x, int y){
-    x = x-65;
     //if(espacios[y][x]->Jugador == NULL){
-        espacios[y][x]->Jugador = J;
-        E->Jugador = NULL;
+    espacios[y][x]->Jugador = J;
+    E->Jugador = NULL;
     //}
     //else printf("\nHay alguien en esta casilla\n");
 }
 
 int calculaPuntos(int PosJugx, int x, int PosJugy, int y){ ///Tambien sirve para calcular distancias
-    x = x-65;
     if(abs(PosJugx-x) > abs(PosJugy-y)) return abs(PosJugx-x);
     else return abs(PosJugy-y);
 }
@@ -537,7 +535,7 @@ void turno(ListaP La, ListaP Lb){
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
 
-            char x; ///PENDIENTE CON CHAR X (MODIFICAR)
+            char x;
             int y, h, puntos, aceptar; //calculaPuntos
 
             if(t0->Jug->ptSalud<=0) seguir0 = 0;
@@ -555,13 +553,16 @@ void turno(ListaP La, ListaP Lb){
 
                 else if(h==3){ ///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                    x=(int)x-65; ///Hacemos casting porque necesitamos el valor en ASCII del char x, le restamos 65 para tener las coordenadas en números, del 0 al 19
+
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                     if(espacios[y][x]->Jugador != NULL) {
                         if(t0->Jug->rango >= puntos && t0->Jug->ptAccion > 1 ){
                             t0->Jug->ptAccion = t0->Jug->ptAccion-puntos;
                             atacar(x, y, t0->Jug->dano, espacios[y][x]->Jugador->armadura, espacios[y][x]->Jugador->evasion, espacios[y][x]->Jugador->ptSalud);
 
-                        ///Ahora escaneamos el estado de los personajes del jugador 1, si alguno tiene vida negativa o nula, se elimina de la lista
+                            ///Ahora escaneamos el estado de los personajes del jugador 1, si alguno tiene vida negativa o nula, se elimina de la lista
 
                             NodoP *t1Scan, *q;
                             t1Scan = Lb;
@@ -605,6 +606,9 @@ void turno(ListaP La, ListaP Lb){
                 else if(h == 4){ ///Moverse
                     printf("\nA donde te quieres mover?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
                     //calculaPuntos = (abs(t0->Jug->posX-x) + abs(t0->Jug->posY-y)); ///Tambien sirve para calcular distancias
+
+                    x=(int)x-65;
+
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
 
                     ///En la estructura de personaje agregué 2 parámetros: posX y posY, permiten ver la posicion del personaje dentro del tablero
@@ -639,6 +643,9 @@ void turno(ListaP La, ListaP Lb){
                     printf("\nQue habilidad quieres usar? Opcion: ");
                     scanf("%d",&k);
                     printf("\nEn que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                    x=(int)x-65;
+
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                     usarHabilidad(t0->Jug->habilidad, x, y, t0->Jug->posX, t0->Jug->posY, puntos, t0->Jug->ptAccion,t0->Jug->ptEnergia,k);
                     printf("\nElegir otra opcion (1), ceder el turno (0): ");
@@ -655,6 +662,9 @@ void turno(ListaP La, ListaP Lb){
                         scanf("%d",&k);
                         if(k==1){
                             printf("\nEn donde quieres utilizar el Item?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                            x=(int)x-65;
+
                             puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                             if(top(t0->Jug->inventario)->rango>puntos && t0->Jug->ptAccion>top(t0->Jug->inventario)->costo){
                                 usarItem(top(t0->Jug->inventario), x, y);
@@ -721,6 +731,9 @@ void turno(ListaP La, ListaP Lb){
 
                 else if(h==3){///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                    x=(int)x-65;
+
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                     if(espacios[y][x]->Jugador != NULL) {
                         if(t1->Jug->rango >= puntos && t1->Jug->ptAccion > 1 ){
@@ -771,6 +784,9 @@ void turno(ListaP La, ListaP Lb){
                 else if(h == 4){ ///Movimiento
                     printf("\nA donde te quieres mover?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
                     //calculaPuntos = (abs(t1->Jug->posX-x) + abs(t1->Jug->posY-y)); ///Tambien sirve para calcular distancias
+
+                    x=(int)x-65;
+
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
 
                     ///En la estructura de personaje agregué 2 parámetros: posX y posY, permiten ver la posicion del personaje dentro del tablero
@@ -784,7 +800,7 @@ void turno(ListaP La, ListaP Lb){
                             t1->Jug->ptAccion = t1->Jug->ptAccion-puntos; ///Restamos los puntos de accion
                             movimientoPersonaje(espacios[t1->Jug->posY][t1->Jug->posX], t1->Jug, x, y);///Mandamos la casilla que apunta al jugador, mandamos al jugador y mandamos las coordenadas a las que se quiera mover.
                             imprimeTerreno();
-                            t1->Jug->posX = x; ///Actualizamos la coordenada x del personaje de turno
+                            t1->Jug->posX = x-65; ///Actualizamos la coordenada x del personaje de turno
                             t1->Jug->posY = y; ///Actualizamos la coordenada y del personaje de turno
                         }
                         else printf("\nHay alguien en esta casilla\n");
@@ -805,6 +821,9 @@ void turno(ListaP La, ListaP Lb){
                     printf("\nQue habilidad quieres usar? Opcion: ");
                     scanf("%d",&k);
                     printf("\nEn que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                    x=(int)x-65;
+
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                     usarHabilidad(t1->Jug->habilidad, x, y, t1->Jug->posX, t1->Jug->posY, puntos, t1->Jug->ptAccion,t1->Jug->ptEnergia,k);
                     printf("\nElegir otra opcion (1), ceder el turno (0): ");
@@ -821,6 +840,9 @@ void turno(ListaP La, ListaP Lb){
                         scanf("%d",&k);
                         if(k==1){
                             printf("\nEn donde quieres utilizar el Item?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                            x=(int)x-65;
+
                             puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                             if(top(t1->Jug->inventario)->rango>puntos && t1->Jug->ptAccion>top(t1->Jug->inventario)->costo){
                                 usarItem(top(t1->Jug->inventario), x, y);
