@@ -554,7 +554,8 @@ void turno(ListaP La, ListaP Lb){
                 else if(h==3){ ///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                    x=(int)x-65; ///Hacemos casting porque necesitamos el valor en ASCII del char x, le restamos 65 para tener las coordenadas en números, del 0 al 19
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65; ///Hacemos casting porque necesitamos el valor en ASCII del char x, le restamos 65 para tener las coordenadas en números, del 0 al 19
 
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                     if(espacios[y][x]->Jugador != NULL) {
@@ -607,7 +608,8 @@ void turno(ListaP La, ListaP Lb){
                     printf("\nA donde te quieres mover?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
                     //calculaPuntos = (abs(t0->Jug->posX-x) + abs(t0->Jug->posY-y)); ///Tambien sirve para calcular distancias
 
-                    x=(int)x-65;
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
 
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
 
@@ -644,7 +646,8 @@ void turno(ListaP La, ListaP Lb){
                     scanf("%d",&k);
                     printf("\nEn que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                    x=(int)x-65;
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
 
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                     usarHabilidad(t0->Jug->habilidad, x, y, t0->Jug->posX, t0->Jug->posY, puntos, t0->Jug->ptAccion,t0->Jug->ptEnergia,k);
@@ -663,7 +666,8 @@ void turno(ListaP La, ListaP Lb){
                         if(k==1){
                             printf("\nEn donde quieres utilizar el Item?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                            x=(int)x-65;
+                            if(!isupper(x)) x=(int)x-97;
+                            else x=(int)x-65;
 
                             puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                             if(top(t0->Jug->inventario)->rango>puntos && t0->Jug->ptAccion>top(t0->Jug->inventario)->costo){
@@ -732,7 +736,8 @@ void turno(ListaP La, ListaP Lb){
                 else if(h==3){///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                    x=(int)x-65;
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
 
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                     if(espacios[y][x]->Jugador != NULL) {
@@ -785,7 +790,8 @@ void turno(ListaP La, ListaP Lb){
                     printf("\nA donde te quieres mover?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
                     //calculaPuntos = (abs(t1->Jug->posX-x) + abs(t1->Jug->posY-y)); ///Tambien sirve para calcular distancias
 
-                    x=(int)x-65;
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
 
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
 
@@ -822,7 +828,8 @@ void turno(ListaP La, ListaP Lb){
                     scanf("%d",&k);
                     printf("\nEn que casilla quieres utilizar la habilidad?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                    x=(int)x-65;
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
 
                     puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                     usarHabilidad(t1->Jug->habilidad, x, y, t1->Jug->posX, t1->Jug->posY, puntos, t1->Jug->ptAccion,t1->Jug->ptEnergia,k);
@@ -841,7 +848,8 @@ void turno(ListaP La, ListaP Lb){
                         if(k==1){
                             printf("\nEn donde quieres utilizar el Item?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
-                            x=(int)x-65;
+                            if(!isupper(x)) x=(int)x-97;
+                            else x=(int)x-65;
 
                             puntos = calculaPuntos(t1->Jug->posX, x, t1->Jug->posY, y);
                             if(top(t1->Jug->inventario)->rango>puntos && t1->Jug->ptAccion>top(t1->Jug->inventario)->costo){
