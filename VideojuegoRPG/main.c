@@ -145,7 +145,7 @@ Personaje newMototaxista(){
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
-    g->ptAccion=20;
+    g->ptAccion=10;
     g->dano=25;
     g->rango=1;
     g->armadura=40;
@@ -162,7 +162,7 @@ Personaje newPolitiCorrupto(){
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
-    g->ptAccion=20;
+    g->ptAccion=10;
     g->dano=20;
     g->rango=2;
     g->armadura=0;
@@ -179,7 +179,7 @@ Personaje newMedicoCubano(){
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
-    g->ptAccion=20;
+    g->ptAccion=10;
     g->dano=15;
     g->rango=1;
     g->armadura=0;
@@ -196,7 +196,7 @@ Personaje newProfesor(){
     g->nombre[16];
     g->ptSalud=100;
     g->ptEnergia=30;
-    g->ptAccion=20;
+    g->ptAccion=10;
     g->dano=15;
     g->rango=4;
     g->armadura=10;
@@ -542,8 +542,8 @@ void turno(ListaP La, ListaP Lb){
             if(t0->Jug->ptSalud<=0) seguir0 = 0;
 
             else {
-                printf("\nJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
-                printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t0->Jug->nombre,t0->Jug->ptSalud,t0->Jug->ptEnergia,t0->Jug->ptAccion);
+                printf("\n\t\tJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
+                printf("\n\t\t%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t0->Jug->nombre,t0->Jug->ptSalud,t0->Jug->ptEnergia,t0->Jug->ptAccion);
                 printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
                 printf("\nOpcion: ");
                 scanf("%d",&h);
@@ -663,6 +663,7 @@ void turno(ListaP La, ListaP Lb){
 
                 else if(h==5){///Usar Habilidad
                     int k;
+                    printf("\n");
                     escribeListaH(t0->Jug->habilidad);
                     printf("\nQue habilidad quieres usar? Opcion: ");
                     scanf("%d",&k);
@@ -745,8 +746,8 @@ void turno(ListaP La, ListaP Lb){
             if(t1->Jug->ptSalud<=0) seguir1 = 0;
 
             else{
-                printf("\nJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
-                printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t1->Jug->nombre,t1->Jug->ptSalud,t1->Jug->ptEnergia,t1->Jug->ptAccion);
+                printf("\n\t\tJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
+                printf("\n\t\t%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t1->Jug->nombre,t1->Jug->ptSalud,t1->Jug->ptEnergia,t1->Jug->ptAccion);
                 printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
                 printf("\nOpcion: ");
                 scanf("%d",&h);
@@ -865,6 +866,7 @@ void turno(ListaP La, ListaP Lb){
 
                 else if(h==5){///Usar Habilidad
                     int k;
+                    printf("\n");
                     escribeListaH(t1->Jug->habilidad);
                     printf("\nQue habilidad quieres usar? Opcion: ");
                     scanf("%d",&k);
