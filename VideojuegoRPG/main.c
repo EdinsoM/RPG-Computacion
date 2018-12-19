@@ -347,9 +347,46 @@ void Yriarte(int a){
     else printf("\nAdios!!!");
 }
 
+int comparaIniciales(char *a, int j, int p){
+    if(j == 0 && p == 0) return -1;
+    else{
+        for(int a=0;a<j;j++){
+            for(int b=0;b<p;b++){
+                if(strcmp(a,Jugador[a][b]->nombre[0]) == 0) return 1;
+            }
+        }
+    }return 0;
+}
+
+void swap(Personaje *a,Personaje *b){
+    Personaje temp;
+    temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+void selectSort(ListaP *L){
+    NodoP *p=*L,*q,*pm;
+    if(p!=NULL){
+        while(p->sig!=NULL){
+            q=p->sig;pm=p;
+            while(q!=NULL){
+                if(q->Jug->velocidad >= pm->Jug->velocidad) pm=q;
+                q=q->sig;
+            }
+            if(pm!=p)swap(&(p->Jug),&(pm->Jug));
+            p=p->sig;
+        }
+    }
+}
+
+void ordenarTurnos(ListaP *L0, ListaP *L1){     //x es Numero de jugadores
+    selectSort(L0);
+    selectSort(L1);
+}
 void seleccionPersonaje(int x, Listaha h){
 
-    int seleccion, s, p;
+    int seleccion, s, p, inicialesIguales;
 
         for(int j=0;j<2;j++){
 
@@ -376,18 +413,28 @@ void seleccionPersonaje(int x, Listaha h){
                 else if(seleccion == 1){
                     fflush(stdin);
                     Jugador[j][p] = newMototaxista();
-                    printf("\nNombre de tu mototaxista: ");
-                    gets(Jugador[j][p]->nombre);
-                    Jugador[j][p]->habilidad = h;
-                    if(j==0) {
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 0;
-                        Jugador[j][p]->posY = p;
-                    }
-                    if(j==1) {
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 19;
-                        Jugador[j][p]->posY = p;
+                    inicialesIguales = 1;
+                    while(inicialesIguales){
+                        printf("\nNombre de tu mototaxista: ");
+                        gets(Jugador[j][p]->nombre);
+                        if(comparaIniciales(Jugador[j][p]->nombre[0],j,p)==1){
+                            printf("\nEscoje un nombre con inicial distinta");
+                            inicialesIguales = 1;
+                        }
+                        else{
+                            Jugador[j][p]->habilidad = h;
+                            if(j==0) {
+                                espacios[p][0]->Jugador = Jugador[j][p];
+                                Jugador[j][p]->posX = 0;
+                                Jugador[j][p]->posY = p;
+                            }
+                            if(j==1) {
+                                espacios[p][19]->Jugador = Jugador[j][p];
+                                Jugador[j][p]->posX = 19;
+                                Jugador[j][p]->posY = p;
+                            }
+                        inicialesIguales=0;
+                        }
                     }
                 }
                 else if(seleccion == 2){
@@ -532,6 +579,7 @@ void turno(ListaP La, ListaP Lb){
 
         int seguir0 = 1, seguir1 = 1;
 
+        t0->Jug->ptEnergia = t0->Jug->ptEnergia+5;
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
@@ -737,6 +785,7 @@ void turno(ListaP La, ListaP Lb){
 
         ///Ahora entramos al segundo while, empiezan a jugar los personajes del jugador 2
 
+        t1->Jug->ptEnergia = t1->Jug->ptEnergia+5;
         t1->Jug->ptAccion = t1->Jug->ptAccion+5; ///Se suman 5 puntos de accion para el personaje del jugador 2
 
         while(seguir1){
@@ -975,6 +1024,8 @@ void main(){
     for(int i=0;i<a;i++){
         insertaPersonaje(Jugador[1][i], &L1); ///Insertamos los personajes del segundo jugador en otra lista
     }
+
+    ordenarTurnos(&L0,&L1);
 
     printf("\nIniciales de los personajes del jugador 0: "); escribeListaP(L0); ///Esta función presenta errores al momento de imprimir,
     printf("\nIniciales de los personajes del jugador 1: "); escribeListaP(L1); ///es posible que haya que hacer una limpieza de buffer.
