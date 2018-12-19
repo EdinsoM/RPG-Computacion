@@ -18,6 +18,8 @@ Lista newList(){
     return NULL;
 }
 */
+
+
 Item newpociondesalud(){
     Item i=malloc(sizeof(It));
     i->nombre="Atamel";
@@ -329,7 +331,8 @@ void atacar(int x, int y, int dano, int armadura, int evasion, int vida){
         k=vida-(dano*(100-armadura))/100;
         printf("\nHas hecho %d dano al personaje %s\n", (dano*(100-armadura))/100, espacios[y][x]->Jugador->nombre);
         espacios[y][x]->Jugador->ptSalud=k;
-        printf("\nA %s le queda %d puntos de vida\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
+        if(espacios[y][x]->Jugador->ptSalud == 0) printf("\nA %s le queda 0 puntos de vida\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
+        else printf("\nA %s le queda %d puntos de vida\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
     }
     else printf("\nEl ataque ha sido esquivado\n");
 }
@@ -345,17 +348,6 @@ void Yriarte(int a){
     scanf("%d", &partidaNueva);
     if(partidaNueva) main();
     else printf("\nAdios!!!");
-}
-
-int comparaIniciales(char *a, int j, int p){
-    if(j == 0 && p == 0) return -1;
-    else{
-        for(int a=0;a<j;j++){
-            for(int b=0;b<p;b++){
-                if(strcmp(a,Jugador[a][b]->nombre[0]) == 0) return 1;
-            }
-        }
-    }return 0;
 }
 
 void swap(Personaje *a,Personaje *b){
@@ -384,7 +376,18 @@ void ordenarTurnos(ListaP *L0, ListaP *L1){     //x es Numero de jugadores
     selectSort(L0);
     selectSort(L1);
 }
+
+int estaEn(char a[], int n, char *x){
+    int k = 0;
+    while(k<n && a[k] != *x){
+        k++;
+    }
+    return k<n;
+}
+
 void seleccionPersonaje(int x, Listaha h){
+
+    char iniciales[16];
 
     int seleccion, s, p, inicialesIguales;
 
@@ -417,76 +420,209 @@ void seleccionPersonaje(int x, Listaha h){
                     while(inicialesIguales){
                         printf("\nNombre de tu mototaxista: ");
                         gets(Jugador[j][p]->nombre);
-                        if(comparaIniciales(Jugador[j][p]->nombre[0],j,p)==1){
-                            printf("\nEscoje un nombre con inicial distinta");
-                            inicialesIguales = 1;
+
+                        if(j==0) iniciales[j+p] = Jugador[j][p]->nombre[0];
+                        if(j==1) iniciales[j+p+x] = Jugador[j][p]->nombre[0];
+
+                        if(j==0){
+                            if(estaEn(iniciales, j+p, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
                         }
-                        else{
-                            Jugador[j][p]->habilidad = h;
-                            if(j==0) {
-                                espacios[p][0]->Jugador = Jugador[j][p];
-                                Jugador[j][p]->posX = 0;
-                                Jugador[j][p]->posY = p;
+                        else if(j==1){
+                            if(estaEn(iniciales, j+p+x, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
                             }
-                            if(j==1) {
-                                espacios[p][19]->Jugador = Jugador[j][p];
-                                Jugador[j][p]->posX = 19;
-                                Jugador[j][p]->posY = p;
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
                             }
-                        inicialesIguales=0;
                         }
                     }
                 }
                 else if(seleccion == 2){
                     fflush(stdin);
                     Jugador[j][p] = newPolitiCorrupto();
-                    printf("\nNombre politico corrupto: ");
-                    gets(Jugador[j][p]->nombre);
-                    Jugador[j][p]->habilidad = h;
-                    if(j==0) {
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 0;
-                        Jugador[j][p]->posY = p;
-                    }
-                    if(j==1) {
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 19;
-                        Jugador[j][p]->posY = p;
+                    inicialesIguales = 1;
+                    while(inicialesIguales){
+                        printf("\nNombre de tu politico corrupto: ");
+                        gets(Jugador[j][p]->nombre);
+
+                        if(j==0) iniciales[j+p] = Jugador[j][p]->nombre[0];
+                        if(j==1) iniciales[j+p+x] = Jugador[j][p]->nombre[0];
+
+                        if(j==0){
+                            if(estaEn(iniciales, j+p, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
+                        else if(j==1){
+                            if(estaEn(iniciales, j+p+x, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
                     }
                 }
                 else if(seleccion == 3){
                     fflush(stdin);
                     Jugador[j][p] = newMedicoCubano();
-                    printf("\nNombre medico cubano: ");
-                    gets(Jugador[j][p]->nombre);
-                    Jugador[j][p]->habilidad = h;
-                    if(j==0) {
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 0;
-                        Jugador[j][p]->posY = p;
-                    }
-                    if(j==1) {
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 19;
-                        Jugador[j][p]->posY = p;
-                    }
+                    inicialesIguales = 1;
+                    while(inicialesIguales){
+                        printf("\nNombre de tu medico cubano: ");
+                        gets(Jugador[j][p]->nombre);
 
+                        if(j==0) iniciales[j+p] = Jugador[j][p]->nombre[0];
+                        if(j==1) iniciales[j+p+x] = Jugador[j][p]->nombre[0];
+
+                        if(j==0){
+                            if(estaEn(iniciales, j+p, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
+                        else if(j==1){
+                            if(estaEn(iniciales, j+p+x, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
+                    }
                 }
                 else if(seleccion == 4){
                     fflush(stdin);
                     Jugador[j][p] = newProfesor();
-                    printf("\nNombre profesor: ");
-                    gets(Jugador[j][p]->nombre);
-                    Jugador[j][p]->habilidad = h;
-                    if(j==0) {
-                        espacios[p][0]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 0;
-                        Jugador[j][p]->posY = p;
-                    }
-                    if(j==1) {
-                        espacios[p][19]->Jugador = Jugador[j][p];
-                        Jugador[j][p]->posX = 19;
-                        Jugador[j][p]->posY = p;
+                    inicialesIguales = 1;
+                    while(inicialesIguales){
+                        printf("\nNombre de tu profesor: ");
+                        gets(Jugador[j][p]->nombre);
+
+                        if(j==0) iniciales[j+p] = Jugador[j][p]->nombre[0];
+                        if(j==1) iniciales[j+p+x] = Jugador[j][p]->nombre[0];
+
+                        if(j==0){
+                            if(estaEn(iniciales, j+p, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
+                        else if(j==1){
+                            if(estaEn(iniciales, j+p+x, &Jugador[j][p]->nombre[0])){
+                                printf("\nElige otro nombre\n");
+                                inicialesIguales = 1;
+                            }
+                            else{
+                                Jugador[j][p]->habilidad = h;
+                                inicialesIguales=0;
+                                if(j==0) {
+                                    espacios[p][0]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 0;
+                                    Jugador[j][p]->posY = p;
+                                }
+                                if(j==1) {
+                                    espacios[p][19]->Jugador = Jugador[j][p];
+                                    Jugador[j][p]->posX = 19;
+                                    Jugador[j][p]->posY = p;
+                                }
+                            }
+                        }
                     }
                 }
                 else if(seleccion == 5){
@@ -507,7 +643,7 @@ void seleccionPersonaje(int x, Listaha h){
                 printf("energia %d, ", Jugador[j][i]->ptEnergia);
                 printf("accion %d, ", Jugador[j][i]->ptAccion);
                 printf("dano %d, ", Jugador[j][i]->dano);
-                printf("rango %d, ", Jugador[j][i]->rango);
+                printf("\nrango %d, ", Jugador[j][i]->rango);
                 printf("armadura %d, ",Jugador[j][i]->armadura);
                 printf("evasion %d, ",Jugador[j][i]->evasion);
                 printf("velocidad %d \n",Jugador[j][i]->velocidad);
@@ -554,7 +690,19 @@ int inicio(Listaha h){
     int cantidad;
     printf("\n\nCon cuantos personajes vas a jugar? Minimo 2, maximo 8 por jugador: ");
     scanf("%d", &cantidad);
-    if(cantidad>=2 && cantidad<=8) seleccionPersonaje(cantidad,h);
+    if(cantidad>=2 && cantidad<=8){
+        printf("\nCuentas con los siguientes personajes: \n");
+        printf("\nEl mototaxista: \n");
+        printf("\n salud 100, energia 30, accion 10, dano 25, \n rango 1, armadura 40, evasion 25, velocidad 2\n");
+        printf("\nEl politico corrupto: \n");
+        printf("\n salud 100, energia 30, accion 10, dano 20, \n rango 2, armadura 0, evasion 10, velocidad 2\n");
+        printf("\nEl medico cubano: \n");
+        printf("\n salud 100, energia 30, accion 10, dano 15, \n rango 1, armadura 0, evasion 10, velocidad 1\n");
+        printf("\nEl profesor: \n");
+        printf("\n salud 100, energia 30, accion 10, dano 15, \n rango 4, armadura 10, evasion 20, velocidad 3\n");
+        printf("\nElige tus personajes: \n");
+        seleccionPersonaje(cantidad,h);
+    }
     else inicio(h);
     return cantidad;
 }
@@ -587,7 +735,7 @@ void turno(ListaP La, ListaP Lb){
             char x;
             int y, h, puntos, aceptar; //calculaPuntos
 
-            if(t0->Jug->ptSalud<=0) seguir0 = 0;
+            if(t0->Jug->ptSalud<=0) t0 = t0->sig;
 
             else {
                 printf("\n\t\tJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
@@ -607,7 +755,7 @@ void turno(ListaP La, ListaP Lb){
                     if(espacios[y][x]->Jugador == NULL /*&& espacios[y][x]->efecto == 0 /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
                     else{
                         if(espacios[y][x]->Jugador != NULL){
-                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y \n%d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptAccion,espacios[y][x]->Jugador->ptEnergia);
+                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y \n%d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptEnergia,espacios[y][x]->Jugador->ptAccion);
                         }
                         if(espacios[y][x]->efecto != 0){
                             if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
@@ -792,7 +940,7 @@ void turno(ListaP La, ListaP Lb){
             char x;
             int y, h, puntos,aceptar;
 
-            if(t1->Jug->ptSalud<=0) seguir1 = 0;
+            if(t1->Jug->ptSalud<=0) t1 = t1->sig;
 
             else{
                 printf("\n\t\tJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
@@ -812,7 +960,7 @@ void turno(ListaP La, ListaP Lb){
                     if(espacios[y][x]->Jugador == NULL /*&& espacios[y][x]->efecto == 0 /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
                     else{
                         if(espacios[y][x]->Jugador != NULL){
-                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y %d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptAccion,espacios[y][x]->Jugador->ptEnergia);
+                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y %d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptEnergia,espacios[y][x]->Jugador->ptAccion);
                         }
                         if(espacios[y][x]->efecto != 0){
                             if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
@@ -898,7 +1046,7 @@ void turno(ListaP La, ListaP Lb){
                             t1->Jug->ptAccion = t1->Jug->ptAccion-puntos; ///Restamos los puntos de accion
                             movimientoPersonaje(espacios[t1->Jug->posY][t1->Jug->posX], t1->Jug, x, y);///Mandamos la casilla que apunta al jugador, mandamos al jugador y mandamos las coordenadas a las que se quiera mover.
                             imprimeTerreno();
-                            t1->Jug->posX = x-65; ///Actualizamos la coordenada x del personaje de turno
+                            t1->Jug->posX = x; ///Actualizamos la coordenada x del personaje de turno
                             t1->Jug->posY = y; ///Actualizamos la coordenada y del personaje de turno
                         }
                         else printf("\nHay alguien en esta casilla\n");
@@ -1027,10 +1175,12 @@ void main(){
 
     ordenarTurnos(&L0,&L1);
 
+    printf("\nPersonajes ordenados de acuerdo a su velocidad\n");
     printf("\nIniciales de los personajes del jugador 0: "); escribeListaP(L0); ///Esta función presenta errores al momento de imprimir,
     printf("\nIniciales de los personajes del jugador 1: "); escribeListaP(L1); ///es posible que haya que hacer una limpieza de buffer.
     printf("\n");
 
     imprimeTerreno();
+
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
 }
