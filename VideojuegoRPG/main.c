@@ -372,7 +372,7 @@ void selectSort(ListaP *L){
     }
 }
 
-void ordenarTurnos(ListaP *L0, ListaP *L1){     //x es Numero de jugadores
+void ordenarTurnos(ListaP *L0, ListaP *L1){
     selectSort(L0);
     selectSort(L1);
 }
@@ -735,7 +735,11 @@ void turno(ListaP La, ListaP Lb){
             char x;
             int y, h, puntos, aceptar; //calculaPuntos
 
-            if(t0->Jug->ptSalud<=0) t0 = t0->sig;
+            if(t0->Jug->ptSalud<=0){
+                t0 = t0->sig;
+                t0->Jug->ptEnergia = t0->Jug->ptEnergia+5;
+                t0->Jug->ptAccion = t0->Jug->ptAccion+5;
+            }
 
             else {
                 printf("\n\t\tJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
@@ -940,7 +944,11 @@ void turno(ListaP La, ListaP Lb){
             char x;
             int y, h, puntos,aceptar;
 
-            if(t1->Jug->ptSalud<=0) t1 = t1->sig;
+            if(t1->Jug->ptSalud<=0){
+                t1 = t1->sig;
+                t1->Jug->ptEnergia = t1->Jug->ptEnergia+5;
+                t1->Jug->ptAccion = t1->Jug->ptAccion+5;
+            }
 
             else{
                 printf("\n\t\tJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
