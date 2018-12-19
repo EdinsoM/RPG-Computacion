@@ -341,7 +341,7 @@ void Yriarte(int a){
     printf("\nElegiste al personaje oculto: Yriarte");
     printf("\nYriarte clavo a todos personajes del equipo contrario");
     printf("\nGana el equipo del jugador %d", a);
-    printf("\nQuieren jugar de nuevo? Si (1), no (0): ");
+    printf("\n\nQuieren jugar de nuevo? Si (1), no (0): ");
     scanf("%d", &partidaNueva);
     if(partidaNueva) main();
     else printf("\nAdios!!!");
@@ -477,12 +477,12 @@ void terrenoPelea(){
 }
 
 void imprimeTerreno(){
-    printf("\n  ");
+    printf("\n\t\t\t  ");
     for(int a=0;a<20;a++){
         printf("%c",a+65);
     }
     for(int i=0;i<10;i++){ ///espacios[y][x]
-        printf("\n%d ",i);
+        printf("\n\t\t\t%d ",i);
         for(int j=0;j<20;j++){
             if(espacios[i][j]->Jugador == NULL) printf("%c", Normal); ///Falta verificar las casillas para efectos e items
             else printf("%c", espacios[i][j]->Jugador->nombre[0]);
@@ -529,6 +529,7 @@ void turno(ListaP La, ListaP Lb){
     ///el while infinito permite volver al ciclo del jugador 1, y asi vamos
 
     while(!(La == NULL || Lb == NULL)){
+
         int seguir0 = 1, seguir1 = 1;
 
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
@@ -543,19 +544,40 @@ void turno(ListaP La, ListaP Lb){
             else {
                 printf("\nJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
                 printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t0->Jug->nombre,t0->Jug->ptSalud,t0->Jug->ptEnergia,t0->Jug->ptAccion);
-                printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
+                printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
                 printf("\nOpcion: ");
                 scanf("%d",&h);
 
                 if(h==1) imprimeTerreno(); ///Imprimimos el terreno
 
-                else if(h==2) printf("\nEstas en la casilla [%d][%d]\n", t0->Jug->posX, t0->Jug->posY); ///Mostramos las coordenadas
+                else if(h==2) { ///Consultar Casilla
+                    printf("\nQue casilla quieres observar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
+
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
+
+                    if(espacios[y][x]->Jugador == NULL /*&& espacios[y][x]->efecto == 0 /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
+                    else{
+                        if(espacios[y][x]->Jugador != NULL){
+                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y \n%d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptAccion,espacios[y][x]->Jugador->ptEnergia);
+                        }
+                        if(espacios[y][x]->efecto != 0){
+                            if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
+                            if (espacios[y][x]->efecto == 2) printf("\nEsta casilla esta prendida en candela\n");
+                            if (espacios[y][x]->efecto == 3) printf("\nEn esta casilla esta pegando tremendo frio\n");
+                        }
+                        /*
+                        if(espacios[y][x]->item != NULL){ No se
+                        }
+                        */
+                    }
+                }
 
                 else if(h==3){ ///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
                     if(!isupper(x)) x=(int)x-97;
-                    else x=(int)x-65; ///Hacemos casting porque necesitamos el valor en ASCII del char x, le restamos 65 para tener las coordenadas en números, del 0 al 19
+                    else x=(int)x-65; ///Hacemos casting porque necesitamos el valor en ASCII del char x, le restamos 65 (o 97 si es minuscula) para tener las coordenadas en números, del 0 al 19
 
                     puntos = calculaPuntos(t0->Jug->posX, x, t0->Jug->posY, y);
                     if(espacios[y][x]->Jugador != NULL) {
@@ -725,14 +747,34 @@ void turno(ListaP La, ListaP Lb){
             else{
                 printf("\nJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
                 printf("\n%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t1->Jug->nombre,t1->Jug->ptSalud,t1->Jug->ptEnergia,t1->Jug->ptAccion);
-                printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
+                printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
                 printf("\nOpcion: ");
                 scanf("%d",&h);
 
                 if(h==1) imprimeTerreno(); ///Imprimimos el terreno
 
-                else if(h==2) printf("\nEstas en la casilla [%d][%d]", t1->Jug->posX, t1->Jug->posY); ///Muestra en cual casilla estás
+                else if(h==2) { ///Consultar Casilla
+                    printf("\nQue casilla quieres observar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
+                    if(!isupper(x)) x=(int)x-97;
+                    else x=(int)x-65;
+
+                    if(espacios[y][x]->Jugador == NULL /*&& espacios[y][x]->efecto == 0 /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
+                    else{
+                        if(espacios[y][x]->Jugador != NULL){
+                            printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y %d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptAccion,espacios[y][x]->Jugador->ptEnergia);
+                        }
+                        if(espacios[y][x]->efecto != 0){
+                            if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
+                            if (espacios[y][x]->efecto == 2) printf("\nEsta casilla esta prendida en candela\n");
+                            if (espacios[y][x]->efecto == 3) printf("\nEn esta casilla esta pegando tremendo frio\n");
+                        }
+                        /*
+                        if(espacios[y][x]->item != NULL){ No se
+                        }
+                        */
+                    }
+                }
                 else if(h==3){///Atacar
                     printf("\nA donde quieres atacar?:"); printf(" X = "); scanf(" %c",&x); printf("Y = "); scanf("%d",&y);
 
