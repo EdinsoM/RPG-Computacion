@@ -259,18 +259,22 @@ void usarItem(Item i, int x, int y){
     if(strcmp(i->nombre,"Atamel") == 0){
         espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)+30;//un tercio del maximo
         printf("\nLe diste un Atamel a %s\n", espacios[y][x]->Jugador->nombre);
+        PlaySound(TEXT("Atamel.wav"),NULL,SND_SYNC);
     }
     if(strcmp(i->nombre,"Cafe") == 0){
          espacios[y][x]->Jugador->ptEnergia = (espacios[y][x]->Jugador->ptEnergia)+10;
          printf("\nLe diste un marron claro a %s y agarro energia\n", espacios[y][x]->Jugador->nombre);
+         PlaySound(TEXT("Energia.wav"),NULL,SND_SYNC);
     }
     if(strcmp(i->nombre,"granada_hora_del_burro") == 0){
         for(int j=x-1;j<x+2;j++){
              for(int k=y-1;k<y+2;k++){
+                if(j<=0) j = 0; if(j>=19) j = 19; if(k<=0) k = 0; if (k>=10) k = 10;
                 espacios[k][j]->efecto = Ninguno;
             }
         }
         printf("\nBorron y cuenta nueva, chamit@\n");
+        PlaySound(TEXT("Granada.wav"),NULL,SND_SYNC);
     }
 }
 
@@ -1389,8 +1393,7 @@ void main(){
     for(int i = 0;i<10;i++){
         espacios[rand()%11][rand()%20]->efecto = rand()%4;
     }
-
-    for(int i = 0;i<5;i++){
+    /*for(int i = 0;i<5;i++){
         AgregaLista(Sa, &(espacios[rand()%11][rand()%20]->item));
     }
     for(int i = 0;i<5;i++){
@@ -1399,7 +1402,7 @@ void main(){
     for(int i = 0;i<5;i++){
         AgregaLista(An, &(espacios[rand()%11][rand()%20]->item));
     }
-
+    */
     imprimeTerreno();
 
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
