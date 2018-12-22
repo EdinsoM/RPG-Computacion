@@ -267,7 +267,7 @@ void usarItem(Item i, int x, int y){
     if(strcmp(i->nombre,"granada_hora_del_burro") == 0){
         for(int j=x-1;j<x+2;j++){
              for(int k=y-1;k<y+2;k++){
-                espacios[y][x]->efecto = 0;
+                espacios[k][j]->efecto = Ninguno;
             }
         }
         printf("\nBorron y cuenta nueva, chamit@\n");
@@ -291,11 +291,11 @@ void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, i
         if(strcmp(p->h->nombre,"Ramazos")==0){
             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)+30;//un tercio del maximo
             printf("\nLe echaste unos ramazos a %s y se ha curado 30 puntos de vida \nAhora tiene %d puntos de vida\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud);
-            ///PlaySound(TEXT("Ramazos.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Ramazos.wav"),NULL,SND_SYNC);
         }
         if(strcmp(p->h->nombre,"PrenderCandela")==0){
             printf("Prendiste en candela %s y le quitaste %d puntos de vida\n",espacios[y][x]->Jugador->nombre,((espacios[y][x]->Jugador->ptSalud)/3));
-            ///PlaySound(TEXT("Fuego.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Fuego.wav"),NULL,SND_SYNC);
             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)-((espacios[y][x]->Jugador->ptSalud)/3);
             espacios[y][x]->efecto = Incendiado;//Casilla incendiada
             printf("\nAhora tiene %d puntos de vida",espacios[y][x]->Jugador->ptSalud);
@@ -304,31 +304,31 @@ void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, i
             espacios[y][x]->Jugador->ptAccion = 0;
             espacios[y][x]->efecto = Congelado;//Casilla Congelada
             printf("\nLe robaste el sueter a %s y ahora se esta muriendo de frio\n",espacios[y][x]->Jugador->nombre);
-            ///PlaySound(TEXT("PegarPacheco.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("PegarPacheco.wav"),NULL,SND_SYNC);
         }
         if(strcmp(p->h->nombre,"Corrientazo")==0){
             espacios[y][x]->Jugador->ptEnergia = (espacios[y][x]->Jugador->ptEnergia)/2;
             espacios[y][x]->efecto = Electrificado;//Casilla Electrificada
             printf("\nHiciste que %s pegara los dedos en un enchufe\n",espacios[y][x]->Jugador->nombre);
-            ///PlaySound(TEXT("Corrientazo.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Corrientazo.wav"),NULL,SND_SYNC);
         }
     }
     else{
         if(p->h->rango < distancia) {
             printf("\nEl objetivo esta fuera de rango\n");
-            ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
         }
         else if(ptAccion < p->h->costoAccion) {
             printf("\nNo posees suficientes puntos de accion\n");
-            ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
         }
         else if(ptEnergia < p->h->costoEnergia) {
             printf("\nNo posees suficientes puntos de energia\n");
-            ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
         }
         if(x == posX && y == posY){
             printf("\nNada vivo tu, chamo\n");
-            ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
         }
     }
 }
@@ -352,7 +352,7 @@ void Yriarte(int a){
     printf("\nElegiste al personaje oculto: Yriarte");
     printf("\nYriarte clavo a todos personajes del equipo contrario");
     printf("\nGana el equipo del jugador %d", a);
-    ///PlaySound(TEXT("Yriarte.wav"),NULL,SND_SYNC);
+    PlaySound(TEXT("Yriarte.wav"),NULL,SND_SYNC);
     printf("\n\nQuieren jugar de nuevo? Si (1), no (0): ");
     scanf("%d", &partidaNueva);
     if(partidaNueva) main();
@@ -684,10 +684,10 @@ void imprimeTerreno(){
     for(int i=0;i<10;i++){ ///espacios[y][x]
         printf("\n\t\t\t%d ",i);
         for(int j=0;j<20;j++){
-            if(espacios[i][j]->Jugador == NULL && espacios[i][j]->item == NULL && espacios[i][j]->efecto == 0) printf("%c", Normal); ///Falta verificar las casillas para efectos e items
+            if(espacios[i][j]->Jugador == NULL && espacios[i][j]->item == NULL && espacios[i][j]->efecto == Ninguno) printf("%c", Normal); ///Falta verificar las casillas para efectos e items
             else if(espacios[i][j]->Jugador != NULL) printf("%c", espacios[i][j]->Jugador->nombre[0]);
             else if(espacios[i][j]->item != NULL) printf("*");
-            else if(espacios[i][j]->efecto != 0) printf("%c", Cualquiera);
+            else if(espacios[i][j]->efecto != Ninguno) printf("%c", Cualquiera);
         }
     }printf("\n");
 }
@@ -742,7 +742,7 @@ void turno(ListaP La, ListaP Lb){
     ///de accion, entonces selecciona la opcion 0, cierra el ciclo y se abre siguiente ciclo, que corresponde al del jugador 2, una vez este cede el turno
     ///el while infinito permite volver al ciclo del jugador 1, y asi vamos
 
-    ///PlaySound(TEXT("Inicio.wav"),NULL,SND_SYNC);
+    PlaySound(TEXT("Inicio.wav"),NULL,SND_SYNC);
 
     while(!(La == NULL || Lb == NULL)){
 
@@ -751,7 +751,7 @@ void turno(ListaP La, ListaP Lb){
         t0->Jug->ptEnergia = t0->Jug->ptEnergia+5;
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
 
-        ///PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
+        PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
 
@@ -781,7 +781,7 @@ void turno(ListaP La, ListaP Lb){
                     if(!isupper(x)) x=(int)x-97;
                     else x=(int)x-65;
 
-                    if(espacios[y][x]->Jugador == NULL /*&& espacios[y][x]->efecto == 0 /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
+                    if(espacios[y][x]->Jugador == NULL && espacios[y][x]->efecto == Ninguno /*&&  espacios[y][x]->Item == NULL */) printf("\nAqui no hay nada, ALO?\n");
                     else{
                         if(espacios[y][x]->Jugador != NULL){
                             printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y \n%d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptEnergia,espacios[y][x]->Jugador->ptAccion);
@@ -791,10 +791,7 @@ void turno(ListaP La, ListaP Lb){
                             if (espacios[y][x]->efecto == Incendiado) printf("\nEsta casilla esta prendida en candela\n");
                             if (espacios[y][x]->efecto == Congelado) printf("\nEn esta casilla esta pegando tremendo frio\n");
                         }
-                        /*
-                        if(espacios[y][x]->item != NULL){ No se
-                        }
-                        */
+                        if(espacios[y][x]->item != NULL) printf("\nAquí hay un item, pero no te voy a decir cual\n");
                     }
                 }
 
@@ -808,7 +805,7 @@ void turno(ListaP La, ListaP Lb){
                     if(espacios[y][x]->Jugador != NULL) {
                         if(t0->Jug->rango >= puntos && t0->Jug->ptAccion > 1 && (x != t0->Jug->posX || y != t0->Jug->posY)){
                             t0->Jug->ptAccion = t0->Jug->ptAccion-puntos;
-                            ///PlaySound(TEXT("Ataque.wav"),NULL,SND_SYNC);
+                            PlaySound(TEXT("Ataque.wav"),NULL,SND_SYNC);
                             atacar(x, y, t0->Jug->dano, espacios[y][x]->Jugador->armadura, espacios[y][x]->Jugador->evasion, espacios[y][x]->Jugador->ptSalud);
 
                             ///Ahora escaneamos el estado de los personajes del jugador 1, si alguno tiene vida negativa o nula, se elimina de la lista
@@ -821,7 +818,7 @@ void turno(ListaP La, ListaP Lb){
                                 espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
                                 espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->item = t1Scan->Jug->inventario;
                                 printf("\nHas acabado con %s\n",t1Scan->Jug->nombre);
-                                ///PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                 free(t1Scan);
                             }
                             else{
@@ -834,13 +831,13 @@ void turno(ListaP La, ListaP Lb){
                                     espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
                                     espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->item = t1Scan->Jug->inventario;
                                     printf("\nHas acabado con %s\n",t1Scan->Jug->nombre);
-                                    ///PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
+                                    PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                     free(q);
                                 }
                             }
                             if(Lb == NULL){
                                 printf("\n\nGana el equipo del jugador 0\n");
-                                ///PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
                                 printf("\nQuieren jugar de nuevo? Si (1), no (0): ");
                                 scanf("%d", &partidaNueva);
                                 if(partidaNueva) main();
@@ -850,15 +847,15 @@ void turno(ListaP La, ListaP Lb){
                         else{
                             if(t0->Jug->rango < puntos ){
                                 printf("\nEl objetivo esta fuera de rango\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                             if(t0->Jug->ptAccion <= 1){
                                 printf("\nNo posees suficientes puntos de accion\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                             if(x == t0->Jug->posX && y == t0->Jug->posY){
                                 printf("\nAlo?\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                         }
                     }
@@ -885,16 +882,36 @@ void turno(ListaP La, ListaP Lb){
                     if(aceptar == 1 && t0->Jug->ptAccion>=puntos){
                         if(espacios[y][x]->Jugador == NULL){
                             t0->Jug->ptAccion = t0->Jug->ptAccion-puntos; ///Restamos los puntos de accion
-                            ///PlaySound(TEXT("Movimiento.wav"),NULL,SND_SYNC);
+                            PlaySound(TEXT("Movimiento.wav"),NULL,SND_SYNC);
                             movimientoPersonaje(espacios[t0->Jug->posY][t0->Jug->posX], t0->Jug, x, y);///Mandamos la casilla que apunta al jugador, mandamos al jugador y mandamos las coordenadas a las que se quiera mover.
                             imprimeTerreno();
                             t0->Jug->posX = x; ///Actualizamos la coordenada x del personaje de turno
                             t0->Jug->posY = y; ///Actualizamos la coordenada y del personaje de turno
+
                             if(espacios[t0->Jug->posY][t0->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
+                            if(espacios[t0->Jug->posY][t0->Jug->posX]->efecto == Incendiado){
+                                t0->Jug->ptSalud = t0->Jug->ptSalud-(t0->Jug->ptSalud)/3;
+                                printf("\nFUEGOOOOOOOOOOOOOOOOOOO\n");
+                                printf("\nAhora tienes %d de vida\n", t0->Jug->ptSalud);
+                                PlaySound(TEXT("Fuego.wav"),NULL,SND_SYNC);
+                                espacios[t0->Jug->posY][t0->Jug->posX]->efecto = Ninguno;
+                            }
+                            if(espacios[t0->Jug->posY][t0->Jug->posX]->efecto == Electrificado){
+                                t0->Jug->ptEnergia = (t0->Jug->ptEnergia)/2;
+                                printf("\nEsto es culpa de la iguana, segun Corpoelec\n");
+                                PlaySound(TEXT("Corrientazo.wav"),NULL,SND_SYNC);
+                                espacios[t0->Jug->posY][t0->Jug->posX]->efecto = Ninguno;
+                            }
+                            if(espacios[t0->Jug->posY][t0->Jug->posX]->efecto == Congelado){
+                                t0->Jug->ptAccion = 0;
+                                printf("\nNo viste al motorizado con parrillero?\n");
+                                PlaySound(TEXT("PegarPacheco.wav"),NULL,SND_SYNC);
+                                espacios[t0->Jug->posY][t0->Jug->posX]->efecto = Ninguno;
+                            }
                         }
                         else{
                             printf("\nHay alguien en esta casilla\n");
-                            ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                            PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                         }
                         printf("\n%s, tienes %d puntos de accion, que deseas hacer?\n", t0->Jug->nombre ,t0->Jug->ptAccion);
                         printf("\nElegir otra opcion (1), ceder el turno (0): ");
@@ -902,7 +919,7 @@ void turno(ListaP La, ListaP Lb){
                     }
                     else if(aceptar == 1 && t0->Jug->ptAccion<puntos){
                         printf("\nNo te alcanzan los puntos de accion, que deseas hacer?\n");
-                        ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                        PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                         printf("\nElegir otra opcion (1), ceder el turno (0): ");
                         scanf("%d", &seguir0);
                     }
@@ -950,7 +967,7 @@ void turno(ListaP La, ListaP Lb){
                             else{
                                 if(t0->Jug->ptAccion < a->costo) printf("\nNo te alcanzan los puntos de accion, que deseas hacer?\n");
                                 if(a->rango < puntos) printf("\nEl objetivo esta fuera de rango\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                                 scanf("%d", &seguir0);
                             }
@@ -1025,7 +1042,7 @@ void turno(ListaP La, ListaP Lb){
 
         t1->Jug->ptEnergia = t1->Jug->ptEnergia+5;
         t1->Jug->ptAccion = t1->Jug->ptAccion+5; ///Se suman 5 puntos de accion para el personaje del jugador 2
-        ///PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
+        PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
         while(seguir1){
             char x;
             int y, h, puntos,aceptar;
@@ -1059,9 +1076,9 @@ void turno(ListaP La, ListaP Lb){
                             printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y %d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptEnergia,espacios[y][x]->Jugador->ptAccion);
                         }
                         if(espacios[y][x]->efecto != 0){
-                            if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
-                            if (espacios[y][x]->efecto == 2) printf("\nEsta casilla esta prendida en candela\n");
-                            if (espacios[y][x]->efecto == 3) printf("\nEn esta casilla esta pegando tremendo frio\n");
+                            if (espacios[y][x]->efecto == Electrificado) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
+                            if (espacios[y][x]->efecto == Incendiado) printf("\nEsta casilla esta prendida en candela\n");
+                            if (espacios[y][x]->efecto == Congelado) printf("\nEn esta casilla esta pegando tremendo frio\n");
                         }
                         /*
                         if(espacios[y][x]->item != NULL){ No se
@@ -1079,7 +1096,7 @@ void turno(ListaP La, ListaP Lb){
                     if(espacios[y][x]->Jugador != NULL) {
                         if(t1->Jug->rango >= puntos && t1->Jug->ptAccion > 1 && (y != t1->Jug->posY || x != t1->Jug->posX)){
                             t1->Jug->ptAccion = t1->Jug->ptAccion-puntos;
-                            ///PlaySound(TEXT("Ataque.wav"),NULL,SND_SYNC);
+                            PlaySound(TEXT("Ataque.wav"),NULL,SND_SYNC);
                             atacar(x, y, t1->Jug->dano, espacios[y][x]->Jugador->armadura, espacios[y][x]->Jugador->evasion, espacios[y][x]->Jugador->ptSalud);
 
                             ///Ahora escaneamos el estado de los personajes del jugador 0, si alguno tiene vida negativa o nula, se elimina de la lista
@@ -1092,7 +1109,7 @@ void turno(ListaP La, ListaP Lb){
                                 espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
                                 espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->item = t0Scan->Jug->inventario;
                                 printf("\nHas acabado con %s\n",t0Scan->Jug->nombre);
-                                ///PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                 free(t0Scan);
                             }
                             else{
@@ -1105,13 +1122,13 @@ void turno(ListaP La, ListaP Lb){
                                     espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
                                     espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->item = t0Scan->Jug->inventario;
                                     printf("\nHas acabado con %s\n",t0Scan->Jug->nombre);
-                                    ///PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
+                                    PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                     free(q);
                                 }
                             }
                             if(La == NULL){
                                 printf("\n\nGana el equipo del jugador 1\n");
-                                ///PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
                                 printf("\nQuieren jugar de nuevo? Si (1), no (0): ");
                                 scanf("%d", &partidaNueva);
                                 if(partidaNueva) main();
@@ -1121,15 +1138,15 @@ void turno(ListaP La, ListaP Lb){
                         else{
                             if(t1->Jug->rango < puntos ){
                                 printf("\nEl objetivo esta fuera de rango\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                             if(t1->Jug->ptAccion <= 1){
                                 printf("\nNo posees suficientes puntos de accion\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                             if(y == t1->Jug->posY && x == t1->Jug->posX){
                                 printf("\nAlo?\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                             }
                         }
                     }
@@ -1155,12 +1172,31 @@ void turno(ListaP La, ListaP Lb){
                     if(aceptar == 1 && t1->Jug->ptAccion>=puntos){
                         if(espacios[y][x]->Jugador == NULL){
                             t1->Jug->ptAccion = t1->Jug->ptAccion-puntos; ///Restamos los puntos de accion
-                            ///PlaySound(TEXT("Movimiento.wav"),NULL,SND_SYNC);
+                            PlaySound(TEXT("Movimiento.wav"),NULL,SND_SYNC);
                             movimientoPersonaje(espacios[t1->Jug->posY][t1->Jug->posX], t1->Jug, x, y);///Mandamos la casilla que apunta al jugador, mandamos al jugador y mandamos las coordenadas a las que se quiera mover.
                             imprimeTerreno();
                             t1->Jug->posX = x; ///Actualizamos la coordenada x del personaje de turno
                             t1->Jug->posY = y; ///Actualizamos la coordenada y del personaje de turno
                             if(espacios[t1->Jug->posY][t1->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
+                            if(espacios[t1->Jug->posY][t1->Jug->posX]->efecto == Incendiado){
+                                t1->Jug->ptSalud = t1->Jug->ptSalud-(t1->Jug->ptSalud)/3;
+                                printf("\nFUEGOOOOOOOOOOOOOOOOOOO\n");
+                                printf("\nAhora tienes %d de vida\n", t1->Jug->ptSalud);
+                                PlaySound(TEXT("Fuego.wav"),NULL,SND_SYNC);
+                                espacios[t1->Jug->posY][t1->Jug->posX]->efecto = Ninguno;
+                            }
+                            if(espacios[t1->Jug->posY][t1->Jug->posX]->efecto == Electrificado){
+                                t1->Jug->ptEnergia = (t1->Jug->ptEnergia)/2;
+                                printf("\nEsto es culpa de la iguana, segun Corpoelec\n");
+                                PlaySound(TEXT("Corrientazo.wav"),NULL,SND_SYNC);
+                                espacios[t1->Jug->posY][t1->Jug->posX]->efecto = Ninguno;
+                            }
+                            if(espacios[t1->Jug->posY][t1->Jug->posX]->efecto == Congelado){
+                                t1->Jug->ptAccion = 0;
+                                printf("\nNo viste al motorizado con parrillero?\n");
+                                PlaySound(TEXT("PegarPacheco.wav"),NULL,SND_SYNC);
+                                espacios[t1->Jug->posY][t1->Jug->posX]->efecto = Ninguno;
+                            }
                         }
                         else printf("\nHay alguien en esta casilla\n");
                         printf("\n%s, tienes %d puntos de accion, que deseas hacer?\n", t1->Jug->nombre ,t1->Jug->ptAccion);
@@ -1169,7 +1205,7 @@ void turno(ListaP La, ListaP Lb){
                     }
                     else if(aceptar == 1 && t1->Jug->ptAccion<puntos){
                         printf("\nNo te alcanzan los puntos de accion, que deseas hacer?\n");
-                        ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                        PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                         printf("\nElegir otra opcion (1), ceder el turno (0): ");
                         scanf("%d", &seguir1);
                     }
@@ -1216,7 +1252,7 @@ void turno(ListaP La, ListaP Lb){
                             else{
                                 if(t1->Jug->ptAccion < a->costo) printf("\nNo te alcanzan los puntos de accion, que deseas hacer?\n");
                                 if(a->rango < puntos) printf("\nEl objetivo esta fuera de rango\n");
-                                ///PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
+                                PlaySound(TEXT("Error.wav"),NULL,SND_SYNC);
                                 printf("\nElegir otra opcion (1), ceder el turno (0): ");
                                 scanf("%d", &seguir1);
                             }
@@ -1286,11 +1322,11 @@ void turno(ListaP La, ListaP Lb){
 
         if(La == NULL){
             printf("\n\nGana el equipo del jugador 1\n");
-            ///PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
         }
         if(Lb == NULL) {
             printf("\n\nGana el equipo del jugador 0\n");
-            ///PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
+            PlaySound(TEXT("Final.wav"),NULL,SND_SYNC);
         }
     }
 
@@ -1350,16 +1386,20 @@ void main(){
     printf("\nIniciales de los personajes del jugador 1: "); escribeListaP(L1); ///es posible que haya que hacer una limpieza de buffer.
     printf("\n");
 
-    /*for(int i = 0;i<5;i++){
-        espacios[rand()%11][rand()%20]->item = Sa;
+    for(int i = 0;i<10;i++){
+        espacios[rand()%11][rand()%20]->efecto = rand()%4;
+    }
+
+    for(int i = 0;i<5;i++){
+        AgregaLista(Sa, &(espacios[rand()%11][rand()%20]->item));
     }
     for(int i = 0;i<5;i++){
-        espacios[rand()%11][rand()%20]->item = En;
+        AgregaLista(En, &(espacios[rand()%11][rand()%20]->item));
     }
     for(int i = 0;i<5;i++){
-        espacios[rand()%11][rand()%20]->item = An;
+        AgregaLista(An, &(espacios[rand()%11][rand()%20]->item));
     }
-    */
+
     imprimeTerreno();
 
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
