@@ -96,7 +96,7 @@ void escribeLista(Lista L){
 
 ///    ///  ///  ///  ///  Pila Inventario  ///  ///  ///  ///  ///
 
-Pila newPila2(){
+/*Pila newPila2(){
     Pila p = malloc(sizeof(Nodo));
     p->i=NULL;
     p->sig = NULL;
@@ -121,5 +121,5 @@ void push2(Item x, Pila *p){
     q->sig = (*p)->sig;
     (*p)->sig = q;
 }
-
+*/
 #endif // PILA_H_INCLUDED

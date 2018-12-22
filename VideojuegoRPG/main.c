@@ -35,7 +35,7 @@ Item newgranadaanuladora(){
 }
 
 typedef struct ha{
-    char *nombre ;//1
+    char *nombre ;
     int costoEnergia;
     int costoAccion;
     int rango;
@@ -247,7 +247,7 @@ typedef Ter* terreno; //terreno apunta a Ter
 terreno newTerreno(){
     terreno t = malloc(sizeof(Ter));
     t->Jugador = NULL;
-    t->efecto = 0;
+    t->efecto = Ninguno;
     t->item = newList();
     return t;
 }
@@ -297,18 +297,18 @@ void usarHabilidad(Listaha L, int x, int y, int posX, int posY, int distancia, i
             printf("Prendiste en candela %s y le quitaste %d puntos de vida\n",espacios[y][x]->Jugador->nombre,((espacios[y][x]->Jugador->ptSalud)/3));
             ///PlaySound(TEXT("Fuego.wav"),NULL,SND_SYNC);
             espacios[y][x]->Jugador->ptSalud = (espacios[y][x]->Jugador->ptSalud)-((espacios[y][x]->Jugador->ptSalud)/3);
-            espacios[y][x]->efecto = 2;//Casilla incendiada
+            espacios[y][x]->efecto = Incendiado;//Casilla incendiada
             printf("\nAhora tiene %d puntos de vida",espacios[y][x]->Jugador->ptSalud);
         }
         if(strcmp(p->h->nombre,"PegarPacheco")==0){
             espacios[y][x]->Jugador->ptAccion = 0;
-            espacios[y][x]->efecto = 3;//Casilla Congelada
+            espacios[y][x]->efecto = Congelado;//Casilla Congelada
             printf("\nLe robaste el sueter a %s y ahora se esta muriendo de frio\n",espacios[y][x]->Jugador->nombre);
             ///PlaySound(TEXT("PegarPacheco.wav"),NULL,SND_SYNC);
         }
         if(strcmp(p->h->nombre,"Corrientazo")==0){
             espacios[y][x]->Jugador->ptEnergia = (espacios[y][x]->Jugador->ptEnergia)/2;
-            espacios[y][x]->efecto = 1;//Casilla Electrificada
+            espacios[y][x]->efecto = Electrificado;//Casilla Electrificada
             printf("\nHiciste que %s pegara los dedos en un enchufe\n",espacios[y][x]->Jugador->nombre);
             ///PlaySound(TEXT("Corrientazo.wav"),NULL,SND_SYNC);
         }
@@ -787,9 +787,9 @@ void turno(ListaP La, ListaP Lb){
                             printf("\nAqui se encuentra %s, tiene %d puntos de vida, %d puntos de energia y \n%d puntos de accion\n",espacios[y][x]->Jugador->nombre,espacios[y][x]->Jugador->ptSalud,espacios[y][x]->Jugador->ptEnergia,espacios[y][x]->Jugador->ptAccion);
                         }
                         if(espacios[y][x]->efecto != 0){
-                            if (espacios[y][x]->efecto == 1) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
-                            if (espacios[y][x]->efecto == 2) printf("\nEsta casilla esta prendida en candela\n");
-                            if (espacios[y][x]->efecto == 3) printf("\nEn esta casilla esta pegando tremendo frio\n");
+                            if (espacios[y][x]->efecto == Electrificado) printf("\nEsta casilla hace que le pegues los dedos a un enchufe...\n");
+                            if (espacios[y][x]->efecto == Incendiado) printf("\nEsta casilla esta prendida en candela\n");
+                            if (espacios[y][x]->efecto == Congelado) printf("\nEn esta casilla esta pegando tremendo frio\n");
                         }
                         /*
                         if(espacios[y][x]->item != NULL){ No se
@@ -1350,6 +1350,16 @@ void main(){
     printf("\nIniciales de los personajes del jugador 1: "); escribeListaP(L1); ///es posible que haya que hacer una limpieza de buffer.
     printf("\n");
 
+    /*for(int i = 0;i<5;i++){
+        espacios[rand()%11][rand()%20]->item = Sa;
+    }
+    for(int i = 0;i<5;i++){
+        espacios[rand()%11][rand()%20]->item = En;
+    }
+    for(int i = 0;i<5;i++){
+        espacios[rand()%11][rand()%20]->item = An;
+    }
+    */
     imprimeTerreno();
 
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
