@@ -1394,8 +1394,8 @@ void main(){
     for(int i = 0;i<10;i++){
         espacios[rand()%11][rand()%20]->efecto = rand()%4;
     }
-
-    /*for(int i = 0;i<5;i++){
+    /*
+    for(int i = 0;i<5;i++){
         AgregaLista(Sa, &(espacios[rand()%11][rand()%20]->item));
     }
     for(int i = 0;i<5;i++){
@@ -1405,7 +1405,6 @@ void main(){
         AgregaLista(An, &(espacios[rand()%11][rand()%20]->item));
     }
     */
-
     imprimeTerreno();
 
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
