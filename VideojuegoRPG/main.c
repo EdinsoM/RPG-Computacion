@@ -754,7 +754,6 @@ void turno(ListaP La, ListaP Lb){
 
         t0->Jug->ptEnergia = t0->Jug->ptEnergia+5;
         t0->Jug->ptAccion = t0->Jug->ptAccion+5; ///Aqui se suman los 5 puntos al personaje del jugador 1
-
         PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
 
         while(seguir0){ ///Empieza a jugar el personaje del jugador 1
@@ -762,15 +761,13 @@ void turno(ListaP La, ListaP Lb){
             char x;
             int y, h, puntos, aceptar; //calculaPuntos
 
-            if(espacios[t0->Jug->posY][t0->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
-
             if(t0->Jug->ptSalud<=0){
                 t0 = t0->sig;
                 t0->Jug->ptEnergia = t0->Jug->ptEnergia+5;
                 t0->Jug->ptAccion = t0->Jug->ptAccion+5;
             }
-
-            else {
+            else{
+                if(espacios[t0->Jug->posY][t0->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
                 printf("\n\t\tJugador 0: Juega el personaje %s\n", t0->Jug->nombre);
                 printf("\n\t\t%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t0->Jug->nombre,t0->Jug->ptSalud,t0->Jug->ptEnergia,t0->Jug->ptAccion);
                 printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
@@ -822,6 +819,7 @@ void turno(ListaP La, ListaP Lb){
                                 espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
                                 espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->item = t1Scan->Jug->inventario;
                                 printf("\nHas acabado con %s\n",t1Scan->Jug->nombre);
+                                t1 = t1->sig;
                                 PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                 free(t1Scan);
                             }
@@ -835,6 +833,7 @@ void turno(ListaP La, ListaP Lb){
                                     espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->Jugador = NULL;
                                     espacios[t1Scan->Jug->posY][t1Scan->Jug->posX]->item = t1Scan->Jug->inventario;
                                     printf("\nHas acabado con %s\n",t1Scan->Jug->nombre);
+                                    t1 = t1->sig;
                                     PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                     free(q);
                                 }
@@ -1047,11 +1046,10 @@ void turno(ListaP La, ListaP Lb){
         t1->Jug->ptEnergia = t1->Jug->ptEnergia+5;
         t1->Jug->ptAccion = t1->Jug->ptAccion+5; ///Se suman 5 puntos de accion para el personaje del jugador 2
         PlaySound(TEXT("Siguiente.wav"),NULL,SND_SYNC);
+
         while(seguir1){
             char x;
             int y, h, puntos,aceptar;
-
-            if(espacios[t1->Jug->posY][t1->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
 
             if(t1->Jug->ptSalud<=0){
                 t1 = t1->sig;
@@ -1060,6 +1058,7 @@ void turno(ListaP La, ListaP Lb){
             }
 
             else{
+                if(espacios[t1->Jug->posY][t1->Jug->posX]->item != NULL) printf("\n\t\tPENDIENTE PERRO CALIENTE!!! Hay items aqui\n");
                 printf("\n\t\tJugador 1: Juega el personaje %s\n", t1->Jug->nombre);
                 printf("\n\t\t%s: Salud = %d\tEnergia = %d\tPtAccion = %d\n", t1->Jug->nombre,t1->Jug->ptSalud,t1->Jug->ptEnergia,t1->Jug->ptAccion);
                 printf("\nQue quieres hacer?\n\n 1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n 9)Datos de tu personaje\n");//1)Mostrar tablero\n 2)Consultar casilla\n 3)Atacar\n 4)Moverse\n 5)Usar habilidad\n 6)Usar item\n 7)Terminar turno\n 8)Inventario\n
@@ -1113,6 +1112,7 @@ void turno(ListaP La, ListaP Lb){
                                 espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
                                 espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->item = t0Scan->Jug->inventario;
                                 printf("\nHas acabado con %s\n",t0Scan->Jug->nombre);
+                                t0 = t0->sig;
                                 PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                 free(t0Scan);
                             }
@@ -1126,6 +1126,7 @@ void turno(ListaP La, ListaP Lb){
                                     espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->Jugador = NULL;
                                     espacios[t0Scan->Jug->posY][t0Scan->Jug->posX]->item = t0Scan->Jug->inventario;
                                     printf("\nHas acabado con %s\n",t0Scan->Jug->nombre);
+                                    t0 =t0->sig;
                                     PlaySound(TEXT("Kill.wav"),NULL,SND_SYNC);
                                     free(q);
                                 }
@@ -1393,6 +1394,7 @@ void main(){
     for(int i = 0;i<10;i++){
         espacios[rand()%11][rand()%20]->efecto = rand()%4;
     }
+
     /*for(int i = 0;i<5;i++){
         AgregaLista(Sa, &(espacios[rand()%11][rand()%20]->item));
     }
@@ -1403,6 +1405,7 @@ void main(){
         AgregaLista(An, &(espacios[rand()%11][rand()%20]->item));
     }
     */
+
     imprimeTerreno();
 
     turno(L0,L1);///Enviamos ambas listas para empezar a asignar los turnos a cada jugador
