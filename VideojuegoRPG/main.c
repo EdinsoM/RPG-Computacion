@@ -748,6 +748,7 @@ void turno(ListaP La, ListaP Lb){
 
     PlaySound(TEXT("Inicio.wav"),NULL,SND_SYNC);
 
+    fflush(stdin);
     while(!(La == NULL || Lb == NULL)){
 
         int seguir0 = 1, seguir1 = 1;
